@@ -1,0 +1,8 @@
+OOP
+Object-Oriented Programming fundamentals including classes, inheritance, polymorphism, and encapsulation. Learn to design and implement robust software solutions.
+DSA
+Data Structures and Algorithms covering arrays, linked lists, trees, graphs, sorting, searching, and algorithm analysis. Master problem-solving skills.
+DM
+Discrete Mathematics including logic, set theory, combinatorics, graph theory, and mathematical reasoning. Essential for computer science foundations.
+TW
+Technical Writing focusing on documentation, reports, specifications, and professional communication. Learn to convey complex technical concepts clearly.

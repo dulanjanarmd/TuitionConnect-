@@ -1,0 +1,1707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Book a Tutor - TuitionConnect</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Find and book top-rated tutors for personalized learning experiences">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #e6f0ff;
+      --primary-dark: #3a56d4;
+      --secondary: #7209b7;
+      --accent: #4cc9f0;
+      --accent-alt: #f72585;
+      --success: #38b000;
+      --warning: #ffaa00;
+      --danger: #ef233c;
+      --bg-light: #ffffff;
+      --bg-dark: #121212;
+      --bg-light-secondary: #f8f9fa;
+      --bg-dark-secondary: #1e1e1e;
+      --text-light: rgba(255, 255, 255, 0.95);
+      --text-dark: rgba(0, 0, 0, 0.95);
+      --text-muted: rgba(0, 0, 0, 0.6);
+      --text-muted-light: rgba(255, 255, 255, 0.7);
+      --border-light: rgba(0, 0, 0, 0.1);
+      --border-dark: rgba(255, 255, 255, 0.1);
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --transition-base: all 0.3s ease;
+      --transition-slow: all 0.6s ease;
+      --border-radius: 8px;
+      --border-radius-lg: 12px;
+      --spacing-unit: 1rem;
+    }
+    
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition-slow);
+      line-height: 1.6;
+    }
+    
+    body.dark-mode {
+      background: var(--bg-dark);
+      color: var(--text-light);
+    }
+    
+    /* Navigation */
+    nav {
+      background: var(--bg-light);
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+      border-bottom: 1px solid var(--border-light);
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode nav {
+      background: var(--bg-dark);
+      border-bottom: 1px solid var(--border-dark);
+    }
+    
+    nav.scrolled {
+      padding: 0.75rem 5%;
+      box-shadow: var(--shadow-md);
+    }
+    
+    nav h1 { 
+      font-size: 1.5rem; 
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-content {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    
+    nav ul li a {
+      color: var(--text-dark);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 0;
+      position: relative;
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode nav ul li a {
+      color: var(--text-light);
+    }
+    
+    nav ul li a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition-base);
+    }
+    
+    nav ul li a:hover {
+      color: var(--primary);
+    }
+    
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+    
+    .dark-toggle {
+      background: transparent;
+      color: var(--text-dark);
+      border: none;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode .dark-toggle {
+      color: var(--text-light);
+    }
+    
+    .dark-toggle:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    
+    body.dark-mode .dark-toggle:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .auth-buttons {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    
+    .auth-btn {
+      padding: 0.5rem 1.25rem;
+      border-radius: var(--border-radius-lg);
+      font-weight: 500;
+      text-decoration: none;
+      transition: var(--transition-base);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .login-btn {
+      background: transparent;
+      border: 1px solid var(--border-light);
+      color: var(--text-dark);
+    }
+    
+    body.dark-mode .login-btn {
+      border: 1px solid var(--border-dark);
+      color: var(--text-light);
+    }
+    
+    .login-btn:hover {
+      background: rgba(0, 0, 0, 0.02);
+      border-color: var(--primary);
+    }
+    
+    body.dark-mode .login-btn:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    
+    .signup-btn {
+      background: var(--primary);
+      border: 1px solid var(--primary);
+      color: white;
+    }
+    
+    .signup-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    /* Main Content */
+    .search-container {
+      padding: 4rem 5%;
+      background: var(--bg-light-secondary);
+    }
+    
+    body.dark-mode .search-container {
+      background: var(--bg-dark-secondary);
+    }
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .section-header h2 {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+    
+    .section-header p {
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    body.dark-mode .section-header p {
+      color: var(--text-muted-light);
+    }
+    
+    /* Search Form */
+    .search-form {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--bg-light);
+      padding: 2rem;
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode .search-form {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-dark);
+    }
+    
+    .search-form:hover {
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text-dark);
+    }
+    
+    body.dark-mode .form-group label {
+      color: var(--text-light);
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-light);
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      transition: var(--transition-base);
+      background: var(--bg-light);
+      color: var(--text-dark);
+    }
+    
+    body.dark-mode .form-control {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-dark);
+      color: var(--text-light);
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+    
+    .input-group {
+      position: relative;
+      display: flex;
+    }
+    
+    .input-group .form-control {
+      flex: 1;
+    }
+    
+    .input-group-append {
+      display: flex;
+      align-items: center;
+      padding: 0 1rem;
+      background: var(--bg-light-secondary);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      border-radius: 0 var(--border-radius) var(--border-radius) 0;
+      cursor: pointer;
+    }
+    
+    body.dark-mode .input-group-append {
+      background: var(--bg-dark-secondary);
+      border: 1px solid var(--border-dark);
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius-lg);
+      font-weight: 500;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition-base);
+      width: 100%;
+    }
+    
+    .btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .btn-block {
+      display: block;
+      width: 100%;
+    }
+    
+    /* Tutor Cards */
+    .tutor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .tutor-card {
+      background: var(--bg-light);
+      border-radius: var(--border-radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition-base);
+      border: 1px solid var(--border-light);
+      cursor: pointer;
+    }
+    
+    body.dark-mode .tutor-card {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-dark);
+    }
+    
+    .tutor-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .tutor-card.selected {
+      border: 2px solid var(--primary);
+    }
+    
+    .tutor-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    
+    .tutor-info {
+      padding: 1.5rem;
+    }
+    
+    .tutor-info h3 {
+      margin-bottom: 0.5rem;
+      color: var(--text-dark);
+    }
+    
+    body.dark-mode .tutor-info h3 {
+      color: var(--text-light);
+    }
+    
+    .tutor-subject {
+      color: var(--primary);
+      font-weight: 500;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    
+    .tutor-rating {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .stars {
+      color: var(--warning);
+    }
+    
+    .rating-count {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    
+    body.dark-mode .rating-count {
+      color: var(--text-muted-light);
+    }
+    
+    .tutor-price {
+      font-weight: 600;
+      color: var(--success);
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+    
+    .tutor-card .btn {
+      width: 100%;
+      text-align: center;
+      padding: 0.75rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: var(--transition-base);
+    }
+    
+    .tutor-card .btn:hover {
+      background: var(--primary-dark);
+    }
+    
+    /* Booking Steps */
+    .booking-steps {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    
+    .booking-steps::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--border-light);
+      z-index: 1;
+    }
+    
+    body.dark-mode .booking-steps::before {
+      background: var(--border-dark);
+    }
+    
+    .step {
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .step-number {
+      width: 40px;
+      height: 40px;
+      background: var(--bg-light-secondary);
+      color: var(--text-muted);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 0.5rem;
+      font-weight: bold;
+      border: 2px solid var(--border-light);
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode .step-number {
+      background: var(--bg-dark-secondary);
+      border-color: var(--border-dark);
+    }
+    
+    .step.active .step-number {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    
+    .step-label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    
+    body.dark-mode .step-label {
+      color: var(--text-muted-light);
+    }
+    
+    .step.active .step-label {
+      color: var(--primary);
+      font-weight: 500;
+    }
+    
+    /* Time Slots */
+    .time-slots-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .time-slot {
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius);
+      background: var(--bg-light-secondary);
+      border: 1px solid var(--border-light);
+      cursor: pointer;
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode .time-slot {
+      background: var(--bg-dark-secondary);
+      border-color: var(--border-dark);
+    }
+    
+    .time-slot:hover {
+      border-color: var(--primary);
+    }
+    
+    .time-slot.selected {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    
+    /* Confirmation Section */
+    .confirmation-section {
+      background: var(--bg-light-secondary);
+      border-radius: var(--border-radius-lg);
+      padding: 2rem;
+      margin-top: 2rem;
+      border: 1px solid var(--border-light);
+    }
+    
+    body.dark-mode .confirmation-section {
+      background: var(--bg-dark-secondary);
+      border-color: var(--border-dark);
+    }
+    
+    .confirmation-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .confirmation-header i {
+      font-size: 3rem;
+      color: var(--success);
+      margin-bottom: 1rem;
+    }
+    
+    .confirmation-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .detail-card {
+      background: var(--bg-light);
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      border: 1px solid var(--border-light);
+    }
+    
+    body.dark-mode .detail-card {
+      background: var(--bg-dark);
+      border-color: var(--border-dark);
+    }
+    
+    .detail-card h4 {
+      margin-bottom: 1rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .detail-card p {
+      margin-bottom: 0.5rem;
+    }
+    
+    /* Loading Overlay */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      display: none;
+    }
+    
+    .spinner {
+      width: 3rem;
+      height: 3rem;
+      border: 0.25rem solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Success Modal */
+    .success-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1001;
+      display: none;
+    }
+    
+    .modal-content {
+      background: var(--bg-light);
+      border-radius: var(--border-radius-lg);
+      padding: 3rem;
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-light);
+    }
+    
+    body.dark-mode .modal-content {
+      background: var(--bg-dark);
+      border-color: var(--border-dark);
+    }
+    
+    .modal-content i {
+      font-size: 4rem;
+      color: var(--success);
+      margin-bottom: 1.5rem;
+    }
+    
+    .modal-content h3 {
+      margin-bottom: 1rem;
+    }
+    
+    .modal-content p {
+      margin-bottom: 2rem;
+      color: var(--text-muted);
+    }
+    
+    body.dark-mode .modal-content p {
+      color: var(--text-muted-light);
+    }
+    
+    /* Footer */
+    footer {
+      background: var(--bg-light);
+      padding: 3rem 5% 1.5rem;
+      border-top: 1px solid var(--border-light);
+    }
+    
+    body.dark-mode footer {
+      background: var(--bg-dark);
+      border-top: 1px solid var(--border-dark);
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      text-align: left;
+    }
+    
+    .footer-column h4 {
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+    }
+    
+    .footer-column ul {
+      list-style: none;
+    }
+    
+    .footer-column ul li {
+      margin-bottom: 0.75rem;
+    }
+    
+    .footer-column ul li a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode .footer-column ul li a {
+      color: var(--text-muted-light);
+    }
+    
+    .footer-column ul li a:hover {
+      color: var(--primary);
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    .social-links a {
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode .social-links a {
+      color: var(--text-muted-light);
+    }
+    
+    .social-links a:hover {
+      color: var(--primary);
+    }
+    
+    .copyright {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-light);
+      color: var(--text-muted);
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    
+    body.dark-mode .copyright {
+      border-top: 1px solid var(--border-dark);
+      color: var(--text-muted-light);
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem 5%;
+      }
+      
+      .nav-content {
+        flex-direction: column;
+        width: 100%;
+      }
+      
+      nav ul {
+        flex-direction: column;
+        gap: 0.75rem;
+        width: 100%;
+      }
+      
+      .auth-buttons {
+        width: 100%;
+        justify-content: center;
+        margin-top: 1rem;
+      }
+      
+      .booking-steps {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      
+      .step {
+        flex: 1 0 100px;
+      }
+      
+      .booking-steps::before {
+        display: none;
+      }
+      
+      .tutor-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .confirmation-details {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar" id="progressBar"></div>
+  
+  <nav id="mainNav">
+    <h1><i class="fas fa-chalkboard-teacher"></i> TuitionConnect</h1>
+    <div class="nav-content">
+      <ul>
+        <li><a href="Search.html">Book a Tutor</a></li>
+        <li><a href="Subjects.html">Subjects</a></li>
+        <li><a href="viewprofile.html">View Profile</a></li>
+        <li><a href="Contact.html">Contact</a></li>
+        <li><a href="viewbooking.html">View Booking</a></li>
+      </ul>
+      <div class="auth-buttons" id="authButtons">
+        <!-- Auth buttons will be dynamically populated -->
+      </div>
+    </div>
+  </nav>
+
+  <section class="search-container">
+    <div class="section-header">
+      <h2 class="reveal">Find Your Perfect Tutor</h2>
+      <p class="reveal">Browse our expert tutors and book a session tailored to your learning needs</p>
+    </div>
+    
+    <!-- Booking Steps -->
+    <div class="booking-steps">
+      <div class="step active" id="step-1">
+        <div class="step-number">1</div>
+        <div class="step-label">Select Subject</div>
+      </div>
+      <div class="step" id="step-2">
+        <div class="step-number">2</div>
+        <div class="step-label">Choose Tutor</div>
+      </div>
+      <div class="step" id="step-3">
+        <div class="step-number">3</div>
+        <div class="step-label">Pick Time</div>
+      </div>
+      <div class="step" id="step-4">
+        <div class="step-number">4</div>
+        <div class="step-label">Confirm</div>
+      </div>
+    </div>
+    
+    <!-- Step 1: Select Subject -->
+    <div class="search-form" id="step1-content">
+      <form id="subject-form">
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <select class="form-control" id="subject" required>
+            <option value="">-- Select a subject --</option>
+            <option value="math">Mathematics</option>
+            <option value="science">Science</option>
+            <option value="english">English</option>
+            <option value="programming">Programming</option>
+            <option value="history">History</option>
+            <option value="economics">Economics</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="education-level">Education Level</label>
+          <select class="form-control" id="education-level" required>
+            <option value="">-- Select education level --</option>
+            <option value="school">School</option>
+            <option value="college">College/University</option>
+            <option value="professional">Professional Development</option>
+          </select>
+        </div>
+        <button type="button" class="btn" onclick="nextStep(1)">Find Tutors</button>
+      </form>
+    </div>
+    
+    <!-- Step 2: Choose Tutor -->
+    <div class="search-form d-none" id="step2-content">
+      <h3>Available Tutors</h3>
+      <div class="tutor-grid" id="tutor-list">
+        <!-- Tutors will be populated here -->
+      </div>
+      <div class="d-flex justify-content-between mt-3">
+        <button type="button" class="btn btn-outline-secondary" onclick="prevStep(2)">Back</button>
+        <button type="button" class="btn btn-primary d-none" id="next-step-2" onclick="nextStep(2)">Next</button>
+      </div>
+    </div>
+    
+    <!-- Step 3: Pick Time -->
+    <div class="search-form d-none" id="step3-content">
+      <form id="time-form">
+        <div class="form-group">
+          <label for="session-date">Select Date</label>
+          <input type="date" class="form-control" id="session-date" required>
+        </div>
+        
+        <div class="form-group">
+          <label>Available Time Slots</label>
+          <div class="time-slots-container" id="time-slots">
+            <!-- Time slots will be populated here -->
+          </div>
+          <small class="text-muted">Selected time: <span id="selected-time" class="text-primary">Not selected</span></small>
+        </div>
+        
+        <div class="form-group">
+          <label for="duration">Session Duration</label>
+          <select class="form-control" id="duration" required>
+            <option value="">-- Select duration --</option>
+            <option value="1">1 hour</option>
+            <option value="1.5">1.5 hours</option>
+            <option value="2">2 hours</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="special-requests">Special Requests (Optional)</label>
+          <textarea class="form-control" id="special-requests" rows="3" placeholder="Any specific topics or requirements?"></textarea>
+        </div>
+        
+        <div class="d-flex justify-content-between">
+          <button type="button" class="btn btn-outline-secondary" onclick="prevStep(3)">Back</button>
+          <button type="button" class="btn btn-primary" id="next-step-3" onclick="nextStep(3)">Next</button>
+        </div>
+      </form>
+    </div>
+    
+    <!-- Step 4: Confirmation -->
+    <div class="search-form d-none" id="step4-content">
+      <div class="confirmation-header">
+        <i class="fas fa-check-circle"></i>
+        <h3>Review Your Booking</h3>
+        <p>Please confirm your booking details below</p>
+      </div>
+      
+      <div class="confirmation-details">
+        <div class="detail-card">
+          <h4><i class="fas fa-user-tie"></i> Tutor Details</h4>
+          <p><strong>Name:</strong> <span id="confirm-tutor">Not selected</span></p>
+          <p><strong>Subject:</strong> <span id="confirm-subject">Not selected</span></p>
+          <p><strong>Rate:</strong> <span id="confirm-rate">$0/hour</span></p>
+          <div class="tutor-rating">
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </div>
+            <span class="rating-count" id="confirm-rating">4.5 (120+ reviews)</span>
+          </div>
+        </div>
+        
+        <div class="detail-card">
+          <h4><i class="fas fa-calendar-alt"></i> Session Details</h4>
+          <p><strong>Date:</strong> <span id="confirm-date">Not selected</span></p>
+          <p><strong>Time:</strong> <span id="confirm-time">Not selected</span></p>
+          <p><strong>Duration:</strong> <span id="confirm-duration">Not selected</span></p>
+          <p><strong>Total:</strong> <span id="confirm-total">$0.00</span></p>
+        </div>
+      </div>
+      
+      <div class="form-group d-none" id="special-requests-section">
+        <h4><i class="fas fa-comment"></i> Special Requests</h4>
+        <div class="p-3 bg-light rounded">
+          <p id="confirm-special-requests" class="mb-0"></p>
+        </div>
+      </div>
+      
+      <div class="d-flex justify-content-between mt-4">
+        <button type="button" class="btn btn-outline-secondary" onclick="prevStep(4)">Back</button>
+        <button type="button" class="btn btn-success" onclick="confirmBooking()">Confirm Booking</button>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="spinner"></div>
+  </div>
+  
+  <!-- Success Modal -->
+  <div class="success-modal" id="success-modal">
+    <div class="modal-content">
+      <i class="fas fa-check-circle"></i>
+      <h3>Booking Confirmed!</h3>
+      <p>Your tutoring session has been successfully booked. You'll receive a confirmation email shortly.</p>
+      <button type="button" class="btn btn-primary" onclick="hideSuccessModal()">Continue</button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-column">
+        <h4>TuitionConnect</h4>
+        <p>Your personalized path to academic success through quality home tutoring.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+      <div class="footer-column">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="Search.html">Book a Tutor</a></li>
+          <li><a href="Subjects.html">Subjects</a></li>
+          <li><a href="Contact.html">Contact Us</a></li>
+          <li><a href="tutormanagement.html">Tutor Management</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="Faq.html">FAQ</a></li>
+          <li><a href="Terms of Service.html">Privacy Policy</a></li>
+          <li><a href="Terms of Service.html">Terms of Service</a></li>
+          <li><a href="Contact.html">Help Center</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Contact Info</h4>
+        <ul>
+          <li><i class="fas fa-map-marker-alt"></i> 123 Education St, Learning City</li>
+          <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+          <li><i class="fas fa-envelope"></i> support@tuitionconnect.com</li>
+        </ul>
+      </div>
+    </div>
+    <div class="copyright">
+      © 2025 TuitionConnect. All rights reserved. | Last updated: May 15, 2025, 12:00 PM +0530
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    // Initialize AOS
+    AOS.init({
+      duration: 800,
+      once: true
+    });
+
+    // Progress Bar
+    function updateProgressBar() {
+      const scrolled = window.scrollY;
+      const maxHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrolled / maxHeight) * 100;
+      document.getElementById('progressBar').style.width = `${progress}%`;
+    }
+
+    window.addEventListener('scroll', updateProgressBar);
+
+    // Global variables to store state
+    let subjects = [];
+    let tutors = [];
+    let selectedSubject = '';
+    let selectedEducationLevel = '';
+    let selectedTutor = null;
+    let selectedDate = '';
+    let selectedTimeSlot = '';
+    let selectedDuration = '';
+    let specialRequests = '';
+    let totalPrice = 0;
+
+    // Constants for API endpoints
+    const API_BASE_URL = 'http://localhost:8080/api';
+    const SUBJECTS_ENDPOINT = 'http://localhost:8080/api/subjects';
+    const TUTORS_ENDPOINT = `${API_BASE_URL}/tutors`;
+    const BOOKINGS_ENDPOINT = `${API_BASE_URL}/bookings`;
+
+    // Initialize the application
+    document.addEventListener('DOMContentLoaded', function () {
+      // Set min date for session-date input to today
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('session-date').min = today;
+
+      // Fetch subjects from API
+      fetchSubjects();
+
+      // Set up event listeners
+      document.getElementById('subject').addEventListener('change', handleSubjectChange);
+      document.getElementById('education-level').addEventListener('change', handleEducationLevelChange);
+      document.getElementById('session-date').addEventListener('change', handleDateChange);
+      document.getElementById('duration').addEventListener('change', handleDurationChange);
+      document.getElementById('special-requests').addEventListener('input', handleSpecialRequestsChange);
+
+      // Update auth buttons based on login state
+      updateAuthButtons();
+    });
+
+    // Update auth buttons based on login state
+    function updateAuthButtons() {
+      const authButtons = document.getElementById('authButtons');
+      const user = JSON.parse(localStorage.getItem('user'));
+
+      if (user) {
+        // Get user details including profile picture
+        const users = JSON.parse(localStorage.getItem(user.role === 'tutor' ? 'tutors' : 'students') || '[]');
+        const userDetails = users.find(u => u.email === user.email);
+        const profilePic = userDetails?.profilePicture || 'https://via.placeholder.com/150';
+
+        // User is logged in
+        authButtons.innerHTML = `
+          <div class="d-flex align-items-center">
+            <div class="profile-dropdown">
+              <img src="${profilePic}" alt="Profile" class="profile-pic" id="profileDropdownBtn">
+              <div class="profile-dropdown-menu" id="profileDropdownMenu">
+                <div class="profile-header-item">
+                  <img src="${profilePic}" alt="Profile" class="profile-header-pic">
+                  <div class="profile-header-info">
+                    <div class="name">${user.name}</div>
+                    <div class="email">${user.email}</div>
+                  </div>
+                </div>
+                <div class="dropdown-divider"></div>
+                <a href="viewprofile.html" class="dropdown-item">
+                  <i class="fas fa-id-card"></i>
+                  View Profile
+                </a>
+                <a href="viewbooking.html" class="dropdown-item">
+                  <i class="fas fa-calendar-check"></i>
+                  My Bookings
+                </a>
+                <div class="dropdown-divider"></div>
+                <a onclick="logout()" class="dropdown-item">
+                  <i class="fas fa-sign-out-alt"></i>
+                  Sign Out
+                </a>
+              </div>
+            </div>
+            <button class="dark-toggle ms-2" onclick="toggleDarkMode()">
+              <i class="fas fa-moon"></i>
+            </button>
+          </div>
+        `;
+
+        // Add click event listener for profile dropdown
+        const profileBtn = document.getElementById('profileDropdownBtn');
+        const dropdownMenu = document.getElementById('profileDropdownMenu');
+        
+        profileBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+          dropdownMenu.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+          if (!e.target.closest('.profile-dropdown')) {
+            dropdownMenu.style.display = 'none';
+            dropdownMenu.classList.remove('show');
+          }
+        });
+      } else {
+        // User is not logged in
+        authButtons.innerHTML = `
+          <a href="Login.html" class="auth-btn login-btn">
+            <i class="fas fa-sign-in-alt"></i> Login
+          </a>
+          <div class="signup-dropdown">
+            <a href="#" class="auth-btn signup-btn">
+              <i class="fas fa-user-plus"></i> Sign Up
+            </a>
+            <div class="dropdown-menu">
+              <a href="studentregister.html">As Student</a>
+              <a href="tutorregister.html">As Tutor</a>
+            </div>
+          </div>
+          <button class="dark-toggle" onclick="toggleDarkMode()">
+            <i class="fas fa-moon"></i>
+          </button>
+        `;
+      }
+    }
+
+    // Logout function
+    function logout() {
+      localStorage.removeItem('user');
+      updateAuthButtons();
+      showNotification('Successfully logged out');
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    }
+
+    // Toggle dark mode
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      
+      // Update icon and store preference
+      const darkToggle = document.querySelector('.dark-toggle');
+      darkToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+      localStorage.setItem('darkMode', isDark);
+      
+      // Show notification
+      showNotification(`Switched to ${isDark ? 'dark' : 'light'} mode`);
+    }
+
+    // Show notification
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      notification.innerHTML = `
+        <i class="fas fa-info-circle"></i>
+        <span>${message}</span>
+      `;
+      
+      document.getElementById('notificationCenter').appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s forwards';
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+
+    // Fetch subjects from the API
+    async function fetchSubjects() {
+      try {
+        const response = await fetch(SUBJECTS_ENDPOINT);
+        if (!response.ok) {
+          throw new Error('Failed to fetch subjects');
+        }
+
+        subjects = await response.json();
+        populateSubjectDropdown(subjects);
+      } catch (error) {
+        console.error('Error fetching subjects:', error);
+        alert('Failed to load subjects. Please refresh the page and try again.');
+      }
+    }
+
+    // Populate the subject dropdown with data from API
+    function populateSubjectDropdown(subjects) {
+      const subjectSelect = document.getElementById('subject');
+      subjectSelect.innerHTML = '<option value="">-- Select a subject --</option>';
+
+      subjects.forEach(subject => {
+        const option = document.createElement('option');
+        option.value = subject.code;
+        option.textContent = `${subject.code} - ${subject.name}`;
+        subjectSelect.appendChild(option);
+      });
+    }
+
+    // Fetch tutors from the API
+    async function fetchTutors() {
+      try {
+        const response = await fetch(TUTORS_ENDPOINT);
+        if (!response.ok) {
+          throw new Error('Failed to fetch tutors');
+        }
+
+        tutors = await response.json();
+        filterAndDisplayTutors();
+      } catch (error) {
+        console.error('Error fetching tutors:', error);
+        alert('Failed to load tutors. Please try again.');
+      }
+    }
+
+    // Filter tutors based on selected subject and display them
+    function filterAndDisplayTutors() {
+      const tutorListContainer = document.getElementById('tutor-list');
+      tutorListContainer.innerHTML = '';
+
+      // Filter tutors that match the selected subject
+      const filteredTutors = tutors.filter(tutor =>
+        tutor.subjects.some(subject =>
+          subject.toLowerCase().includes(selectedSubject.toLowerCase())
+        )
+      );
+
+      if (filteredTutors.length === 0) {
+        tutorListContainer.innerHTML = '<div class="col-12 text-center py-4"><p class="text-muted">No tutors available for the selected subject.</p></div>';
+        return;
+      }
+
+      // Create tutor cards
+      filteredTutors.forEach(tutor => {
+        const tutorCard = document.createElement('div');
+        tutorCard.className = 'tutor-card';
+        tutorCard.innerHTML = `
+          <img src="${tutor.profilePicture || 'https://randomuser.me/api/portraits/lego/1.jpg'}" alt="Tutor" class="tutor-img">
+          <div class="tutor-info">
+            <h3>${tutor.fullName}</h3>
+            <span class="tutor-subject">${tutor.subjects[0]}</span>
+            <div class="tutor-rating">
+              <div class="stars">
+                ${generateStars(tutor.rating)}
+              </div>
+              <span class="rating-count">(${Math.floor(tutor.rating * 20)} reviews)</span>
+            </div>
+            <span class="tutor-price">$${tutor.hourlyRate}/hour</span>
+            <button class="btn">Select Tutor</button>
+          </div>
+        `;
+
+        tutorListContainer.appendChild(tutorCard);
+
+        // Add click event to select tutor
+        const card = tutorCard.querySelector('.tutor-card');
+        card.addEventListener('click', () => selectTutor(tutor, card));
+      });
+    }
+
+    // Helper function to generate star ratings
+    function generateStars(rating) {
+      let stars = '';
+      const fullStars = Math.floor(rating);
+      const hasHalfStar = rating % 1 >= 0.5;
+      
+      for (let i = 0; i < fullStars; i++) {
+        stars += '<i class="fas fa-star"></i>';
+      }
+      
+      if (hasHalfStar) {
+        stars += '<i class="fas fa-star-half-alt"></i>';
+      }
+      
+      const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+      for (let i = 0; i < emptyStars; i++) {
+        stars += '<i class="far fa-star"></i>';
+      }
+      
+      return stars;
+    }
+
+    // Select a tutor
+    function selectTutor(tutor, card) {
+      // Reset previous selection
+      document.querySelectorAll('.tutor-card.selected').forEach(el => {
+        el.classList.remove('selected');
+      });
+
+      // Set new selection
+      card.classList.add('selected');
+      selectedTutor = tutor;
+
+      // Update session summary and confirmation details
+      document.getElementById('confirm-tutor').textContent = tutor.fullName;
+      document.getElementById('confirm-rate').textContent = `$${tutor.hourlyRate}/hour`;
+      document.getElementById('confirm-rating').textContent = `${tutor.rating} (${Math.floor(tutor.rating * 20)}+ reviews)`;
+
+      // Update duration prices
+      document.querySelectorAll('.duration-price').forEach((el, index) => {
+        const multiplier = index === 0 ? 1 : index === 1 ? 1.5 : 2;
+        el.textContent = (tutor.hourlyRate * multiplier).toFixed(2);
+      });
+
+      // Enable next button
+      document.getElementById('next-step-2').classList.remove('d-none');
+
+      // Generate time slots if date is already selected
+      if (selectedDate) {
+        generateTimeSlots();
+      }
+    }
+
+    // Generate time slots based on tutor availability
+    function generateTimeSlots() {
+      const timeSlotsContainer = document.getElementById('time-slots');
+      timeSlotsContainer.innerHTML = '';
+
+      if (!selectedTutor || !selectedDate) {
+        return;
+      }
+
+      const date = new Date(selectedDate);
+      const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'long' });
+
+      // Find tutor's availability for the selected day
+      const availability = selectedTutor.availability.find(
+        avail => avail.day === dayOfWeek
+      );
+
+      if (!availability) {
+        timeSlotsContainer.innerHTML = `<p class="text-muted">The tutor is not available on ${dayOfWeek}s.</p>`;
+        return;
+      }
+
+      const { startTime, endTime } = availability;
+      const timeSlots = generateTimeSlotsArray(startTime, endTime);
+
+      if (timeSlots.length === 0) {
+        timeSlotsContainer.innerHTML = '<p class="text-muted">No time slots available for this day.</p>';
+        return;
+      }
+
+      // Create time slot buttons
+      timeSlots.forEach(slot => {
+        const button = document.createElement('button');
+        button.className = 'time-slot';
+        button.type = 'button';
+        button.textContent = slot;
+        button.addEventListener('click', () => selectTimeSlot(slot, button));
+        timeSlotsContainer.appendChild(button);
+      });
+    }
+
+    // Helper function to generate array of time slots
+    function generateTimeSlotsArray(startTime, endTime) {
+      const slots = [];
+      const [startHour, startMinute] = startTime.split(':').map(Number);
+      const [endHour, endMinute] = endTime.split(':').map(Number);
+
+      let currentHour = startHour;
+      let currentMinute = startMinute;
+
+      while (currentHour < endHour || (currentHour === endHour && currentMinute < endMinute)) {
+        slots.push(`${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}`);
+
+        // Add 30 minutes
+        currentMinute += 30;
+        if (currentMinute >= 60) {
+          currentHour += 1;
+          currentMinute = 0;
+        }
+      }
+
+      return slots;
+    }
+
+    // Select a time slot
+    function selectTimeSlot(slot, button) {
+      // Reset previous selection
+      document.querySelectorAll('.time-slot.selected').forEach(el => {
+        el.classList.remove('selected');
+      });
+
+      // Set new selection
+      button.classList.add('selected');
+      selectedTimeSlot = slot;
+
+      // Update UI
+      document.getElementById('selected-time').textContent = slot;
+
+      // Enable next button if duration is also selected
+      document.getElementById('next-step-3').disabled = !(selectedTimeSlot && selectedDuration);
+
+      updateSessionSummary();
+    }
+
+    // Handle subject change
+    function handleSubjectChange(event) {
+      selectedSubject = event.target.value;
+      const selectedSubjectData = subjects.find(s => s.code === selectedSubject);
+
+      if (selectedSubjectData) {
+        document.getElementById('confirm-subject').textContent = selectedSubjectData.name;
+      } else {
+        document.getElementById('confirm-subject').textContent = 'Not selected';
+      }
+    }
+
+    // Handle education level change
+    function handleEducationLevelChange(event) {
+      selectedEducationLevel = event.target.value;
+    }
+
+    // Handle date change
+    function handleDateChange(event) {
+      selectedDate = event.target.value;
+
+      if (selectedDate) {
+        const formattedDate = new Date(selectedDate).toLocaleDateString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+
+        document.getElementById('confirm-date').textContent = formattedDate;
+
+        // Generate time slots if tutor is selected
+        if (selectedTutor) {
+          generateTimeSlots();
+        }
+      } else {
+        document.getElementById('confirm-date').textContent = 'Not selected';
+      }
+
+      // Reset time slot selection
+      selectedTimeSlot = '';
+      document.getElementById('selected-time').textContent = 'Not selected';
+      document.getElementById('time-slots').innerHTML = '';
+      document.getElementById('next-step-3').disabled = true;
+
+      updateSessionSummary();
+    }
+
+    // Handle duration change
+    function handleDurationChange(event) {
+      selectedDuration = event.target.value;
+
+      if (selectedDuration && selectedTutor) {
+        const hours = parseFloat(selectedDuration);
+        totalPrice = selectedTutor.hourlyRate * hours;
+
+        document.getElementById('confirm-duration').textContent = `${hours} hour${hours !== 1 ? 's' : ''}`;
+        document.getElementById('confirm-total').textContent = `$${totalPrice.toFixed(2)}`;
+      } else {
+        document.getElementById('confirm-duration').textContent = 'Not selected';
+        document.getElementById('confirm-total').textContent = '$0.00';
+      }
+
+      // Enable next button if time slot is also selected
+      document.getElementById('next-step-3').disabled = !(selectedTimeSlot || selectedDuration);
+
+      updateSessionSummary();
+    }
+
+    // Handle special requests change
+    function handleSpecialRequestsChange(event) {
+      specialRequests = event.target.value;
+
+      // Update confirmation page
+      const specialRequestsSection = document.getElementById('special-requests-section');
+      const confirmSpecialRequests = document.getElementById('confirm-special-requests');
+
+      if (specialRequests.trim()) {
+        confirmSpecialRequests.textContent = specialRequests;
+        specialRequestsSection.classList.remove('d-none');
+      } else {
+        confirmSpecialRequests.textContent = '';
+        specialRequestsSection.classList.add('d-none');
+      }
+    }
+
+    // Update session summary
+    function updateSessionSummary() {
+      // This function updates all summary fields based on current selections
+      const subjectData = subjects.find(s => s.code === selectedSubject);
+
+      if (subjectData) {
+        document.getElementById('confirm-subject').textContent = subjectData.name;
+      }
+
+      if (selectedTutor) {
+        document.getElementById('confirm-tutor').textContent = selectedTutor.fullName;
+        document.getElementById('confirm-rate').textContent = `$${selectedTutor.hourlyRate}/hour`;
+      }
+
+      if (selectedDate) {
+        const formattedDate = new Date(selectedDate).toLocaleDateString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+        document.getElementById('confirm-date').textContent = formattedDate;
+      }
+
+      if (selectedTimeSlot) {
+        document.getElementById('confirm-time').textContent = selectedTimeSlot;
+      }
+
+      if (selectedDuration) {
+        const hours = parseFloat(selectedDuration);
+        document.getElementById('confirm-duration').textContent = `${hours} hour${hours !== 1 ? 's' : ''}`;
+
+        if (selectedTutor) {
+          totalPrice = selectedTutor.hourlyRate * hours;
+          document.getElementById('confirm-total').textContent = `$${totalPrice.toFixed(2)}`;
+        }
+      }
+    }
+
+    // Next step function
+    function nextStep(currentStep) {
+      // Validate current step before proceeding
+      if (currentStep === 1) {
+        if (!selectedSubject || !selectedEducationLevel) {
+          alert('Please select a subject and education level');
+          return;
+        }
+
+        // Fetch tutors for step 2
+        fetchTutors();
+      } else if (currentStep === 2) {
+        if (!selectedTutor) {
+          alert('Please select a tutor');
+          return;
+        }
+      } else if (currentStep === 3) {
+        if (!selectedDate || !selectedTimeSlot || !selectedDuration) {
+          alert('Please select date, time, and duration');
+          return;
+        }
+      }
+
+      // Hide current step
+      document.getElementById(`step${currentStep}-content`).classList.add('d-none');
+
+      // Show next step
+      const nextStepNumber = currentStep + 1;
+      document.getElementById(`step${nextStepNumber}-content`).classList.remove('d-none');
+
+      // Update step indicators
+      document.querySelectorAll('.step').forEach(step => {
+        step.classList.remove('active');
+      });
+      document.getElementById(`step-${nextStepNumber}`).classList.add('active');
+    }
+
+    // Previous step function
+    function prevStep(currentStep) {
+      // Hide current step
+      document.getElementById(`step${currentStep}-content`).classList.add('d-none');
+
+      // Show previous step
+      const prevStepNumber = currentStep - 1;
+      document.getElementById(`step${prevStepNumber}-content`).classList.remove('d-none');
+
+      // Update step indicators
+      document.querySelectorAll('.step').forEach(step => {
+        step.classList.remove('active');
+      });
+      document.getElementById(`step-${prevStepNumber}`).classList.add('active');
+    }
+
+    // Confirm booking function
+    async function confirmBooking() {
+      // Validate all required fields are filled
+      if (!selectedSubject || !selectedTutor || !selectedDate || !selectedTimeSlot || !selectedDuration) {
+        alert('Please complete all required fields');
+        return;
+      }
+
+      // Show loading overlay
+      document.getElementById('loading-overlay').style.display = 'flex';
+
+      try {
+        // Create booking object
+        const booking = {
+          userId: 1, // This would typically come from the logged-in user
+          tutorId: selectedTutor.id,
+          subject: subjects.find(s => s.code === selectedSubject)?.name || selectedSubject,
+          sessionDate: selectedDate,
+          startTime: selectedTimeSlot,
+          duration: parseFloat(selectedDuration),
+          paymentMethod: "card", // Default payment method
+          total: totalPrice,
+          specialRequests: specialRequests
+        };
+
+        // Send booking request to API
+        const response = await fetch(BOOKINGS_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(booking)
+        });
+
+        if (!response.ok) {
+          throw new Error('Booking request failed');
+        }
+
+        // Booking successful
+        const bookingResult = await response.json();
+
+        // Hide loading overlay
+        document.getElementById('loading-overlay').style.display = 'none';
+
+        // Show success modal
+        document.getElementById('success-modal').style.display = 'flex';
+      } catch (error) {
+        console.error('Error making booking:', error);
+
+        // Hide loading overlay
+        document.getElementById('loading-overlay').style.display = 'none';
+
+        // Show error message
+        alert('Failed to make booking. Please try again.');
+      }
+    }
+
+    // Hide success modal
+    function hideSuccessModal() {
+      document.getElementById('success-modal').style.display = 'none';
+      
+      // Redirect to home page
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>

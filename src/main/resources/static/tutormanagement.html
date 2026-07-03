@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TuitionConnect - Tutor Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Admin dashboard for managing tutors">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #e6f0ff;
+      --primary-dark: #3a56d4;
+      --secondary: #7209b7;
+      --accent: #4cc9f0;
+      --accent-alt: #f72585;
+      --success: #38b000;
+      --warning: #ffaa00;
+      --danger: #ef233c;
+      --bg-light: #ffffff;
+      --bg-dark: #121212;
+      --bg-light-secondary: #f8f9fa;
+      --bg-dark-secondary: #1e1e1e;
+      --text-light: rgba(255, 255, 255, 0.95);
+      --text-dark: rgba(0, 0, 0, 0.95);
+      --text-muted: rgba(0, 0, 0, 0.6);
+      --text-muted-light: rgba(255, 255, 255, 0.7);
+      --border-light: rgba(0, 0, 0, 0.1);
+      --border-dark: rgba(255, 255, 255, 0.1);
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --transition-base: all 0.3s ease;
+      --transition-slow: all 0.6s ease;
+      --border-radius: 8px;
+      --border-radius-lg: 12px;
+      --spacing-unit: 1rem;
+    }
+    
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition-slow);
+      line-height: 1.6;
+    }
+    
+    body.dark-mode {
+      background: var(--bg-dark);
+      color: var(--text-light);
+    }
+
+    /* Navigation */
+    nav {
+      background: var(--bg-light);
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+      border-bottom: 1px solid var(--border-light);
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode nav {
+      background: var(--bg-dark);
+      border-bottom: 1px solid var(--border-dark);
+    }
+    
+    nav.scrolled {
+      padding: 0.75rem 5%;
+      box-shadow: var(--shadow-md);
+    }
+    
+    nav h1 { 
+      font-size: 1.5rem; 
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-content {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    
+    nav ul li a {
+      color: var(--text-dark);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 0;
+      position: relative;
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode nav ul li a {
+      color: var(--text-light);
+    }
+    
+    nav ul li a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition-base);
+    }
+    
+    nav ul li a:hover {
+      color: var(--primary);
+    }
+    
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+    
+    .dark-toggle {
+      background: transparent;
+      color: var(--text-dark);
+      border: none;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode .dark-toggle {
+      color: var(--text-light);
+    }
+    
+    .dark-toggle:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    
+    body.dark-mode .dark-toggle:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Admin Dashboard Styles */
+    .admin-container {
+      flex: 1;
+      padding: 2rem 5%;
+      background: var(--bg-light-secondary);
+    }
+    
+    body.dark-mode .admin-container {
+      background: var(--bg-dark-secondary);
+    }
+    
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    
+    .admin-header h2 {
+      font-size: 1.75rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .admin-actions {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--border-radius-lg);
+      font-weight: 500;
+      text-decoration: none;
+      transition: var(--transition-base);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      border: none;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .btn-outline-primary {
+      background: transparent;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+    }
+    
+    body.dark-mode .btn-outline-primary {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    
+    .btn-outline-primary:hover {
+      background: var(--primary-light);
+    }
+    
+    body.dark-mode .btn-outline-primary:hover {
+      background: rgba(67, 97, 238, 0.1);
+    }
+    
+    .filter-container {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .form-control {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-light);
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      transition: var(--transition-base);
+      background: var(--bg-light);
+      color: var(--text-dark);
+      min-width: 200px;
+    }
+    
+    body.dark-mode .form-control {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-dark);
+      color: var(--text-light);
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+    
+    .form-select {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-light);
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      transition: var(--transition-base);
+      background: var(--bg-light);
+      color: var(--text-dark);
+      min-width: 200px;
+    }
+    
+    body.dark-mode .form-select {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-dark);
+      color: var(--text-light);
+    }
+    
+    .table-responsive {
+      overflow-x: auto;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-sm);
+      background: var(--bg-light);
+      border: 1px solid var(--border-light);
+    }
+    
+    body.dark-mode .table-responsive {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-dark);
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-light);
+      vertical-align: middle;
+    }
+    
+    body.dark-mode th, 
+    body.dark-mode td {
+      border-bottom: 1px solid var(--border-dark);
+    }
+    
+    th {
+      background: var(--primary-light);
+      font-weight: 600;
+      color: var(--primary);
+    }
+    
+    body.dark-mode th {
+      background: rgba(67, 97, 238, 0.1);
+    }
+    
+    tr:hover {
+      background: var(--primary-light);
+    }
+    
+    body.dark-mode tr:hover {
+      background: rgba(67, 97, 238, 0.1);
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .badge-primary {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+    
+    body.dark-mode .badge-primary {
+      background: rgba(67, 97, 238, 0.2);
+    }
+    
+    .badge-success {
+      background: rgba(56, 176, 0, 0.1);
+      color: var(--success);
+    }
+    
+    body.dark-mode .badge-success {
+      background: rgba(56, 176, 0, 0.2);
+    }
+    
+    .badge-warning {
+      background: rgba(255, 170, 0, 0.1);
+      color: var(--warning);
+    }
+    
+    body.dark-mode .badge-warning {
+      background: rgba(255, 170, 0, 0.2);
+    }
+    
+    .badge-danger {
+      background: rgba(239, 35, 60, 0.1);
+      color: var(--danger);
+    }
+    
+    body.dark-mode .badge-danger {
+      background: rgba(239, 35, 60, 0.2);
+    }
+    
+    .subject-badge {
+      display: inline-block;
+      padding: 0.25rem 0.6em;
+      font-size: 0.75rem;
+      font-weight: 600;
+      line-height: 1;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: baseline;
+      border-radius: 0.25rem;
+      margin-right: 0.2rem;
+      margin-bottom: 0.2rem;
+      background: var(--bg-light-secondary);
+      color: var(--text-dark);
+    }
+    
+    body.dark-mode .subject-badge {
+      background: var(--bg-dark-secondary);
+      color: var(--text-light);
+    }
+    
+    .btn-sm {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+    }
+    
+    .btn-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+    }
+    
+    .empty-state i {
+      font-size: 3rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+    
+    body.dark-mode .empty-state i {
+      color: var(--text-muted-light);
+    }
+    
+    .empty-state h5 {
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+    }
+    
+    body.dark-mode .empty-state h5 {
+      color: var(--text-light);
+    }
+    
+    .empty-state p {
+      color: var(--text-muted);
+    }
+    
+    body.dark-mode .empty-state p {
+      color: var(--text-muted-light);
+    }
+    
+    /* Loading Spinner */
+    .loader {
+      width: 48px;
+      height: 48px;
+      border: 5px solid var(--primary);
+      border-bottom-color: transparent;
+      border-radius: 50%;
+      display: inline-block;
+      box-sizing: border-box;
+      animation: rotation 1s linear infinite;
+    }
+    
+    @keyframes rotation {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .loading-container {
+      text-align: center;
+      padding: 2rem;
+    }
+    
+    /* Modal Styles */
+    .modal-content {
+      background: var(--bg-light);
+      border: 1px solid var(--border-light);
+      border-radius: var(--border-radius-lg);
+    }
+    
+    body.dark-mode .modal-content {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-dark);
+    }
+    
+    .modal-header {
+      border-bottom: 1px solid var(--border-light);
+    }
+    
+    body.dark-mode .modal-header {
+      border-bottom: 1px solid var(--border-dark);
+    }
+    
+    .modal-footer {
+      border-top: 1px solid var(--border-light);
+    }
+    
+    body.dark-mode .modal-footer {
+      border-top: 1px solid var(--border-dark);
+    }
+    
+    /* Footer */
+    footer {
+      background: var(--bg-light);
+      padding: 1.5rem 5%;
+      border-top: 1px solid var(--border-light);
+      text-align: center;
+      color: var(--text-muted);
+    }
+    
+    body.dark-mode footer {
+      background: var(--bg-dark);
+      border-top: 1px solid var(--border-dark);
+      color: var(--text-muted-light);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem 5%;
+      }
+      
+      .nav-content {
+        flex-direction: column;
+        width: 100%;
+      }
+      
+      nav ul {
+        flex-direction: column;
+        gap: 0.75rem;
+        width: 100%;
+      }
+      
+      .auth-buttons {
+        width: 100%;
+        justify-content: center;
+        margin-top: 1rem;
+      }
+      
+      .admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      
+      .filter-container {
+        flex-direction: column;
+      }
+      
+      .form-control, .form-select {
+        width: 100%;
+      }
+    }
+    
+    /* Notification System */
+    .notification-center {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 1000;
+    }
+    
+    .notification {
+      background: var(--bg-light);
+      border-radius: var(--border-radius);
+      padding: 1rem;
+      margin-top: 0.5rem;
+      box-shadow: var(--shadow-md);
+      transform: translateX(150%);
+      animation: slideIn 0.3s forwards;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    @keyframes slideIn {
+      to { transform: translateX(0); }
+    }
+  </style>
+</head>
+<body>
+  <nav id="mainNav">
+    <h1><i class="fas fa-chalkboard-teacher"></i> TuitionConnect</h1>
+    <div class="nav-content">
+      <ul>
+        <li><a href="studentlist.html"><i class="fas fa-users"></i> Students</a></li>
+        <li><a href="tutorlist.html"><i class="fas fa-user-tie"></i> Tutors</a></li>
+        <li><a href="tutormanagement.html"><i class="fas fa-cog"></i> Management</a></li>
+        <li><a href="viewbooking.html"><i class="fas fa-calendar-check"></i> Bookings</a></li>
+      </ul>
+      <div class="auth-buttons" id="authButtons">
+        <!-- Auth buttons will be dynamically populated -->
+      </div>
+    </div>
+  </nav>
+
+  <div class="admin-container">
+    <div class="admin-header">
+      <h2><i class="fas fa-user-tie"></i> Tutor Management</h2>
+      <div class="admin-actions">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTutorModal">
+          <i class="fas fa-plus"></i> Add Tutor
+        </button>
+      </div>
+    </div>
+
+    <div class="filter-container">
+      <select class="form-select" id="subject-filter">
+        <option value="">All Subjects</option>
+        <option value="OOP">OOP</option>
+        <option value="DSA">DSA</option>
+        <option value="DM">DM</option>
+        <option value="TW">TW</option>
+      </select>
+      <select class="form-select" id="status-filter">
+        <option value="">All Statuses</option>
+        <option value="active">Active</option>
+        <option value="pending">Pending</option>
+        <option value="inactive">Inactive</option>
+      </select>
+      <input type="text" class="form-control" id="search-input" placeholder="Search tutors...">
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading-state" class="loading-container">
+      <span class="loader"></span>
+      <p>Loading tutors...</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="error-state" class="empty-state d-none">
+      <i class="fas fa-exclamation-circle text-danger"></i>
+      <h5>Failed to load tutors</h5>
+      <p>There was an error connecting to the server.</p>
+      <button class="btn btn-primary mt-2" onclick="loadTutors()">
+        <i class="fas fa-sync-alt"></i> Try Again
+      </button>
+    </div>
+
+    <!-- Tutors Table -->
+    <div id="tutors-table-container" class="d-none">
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Photo</th>
+              <th>Name</th>
+              <th>Subjects</th>
+              <th>Experience</th>
+              <th>Rate</th>
+              <th>Rating</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tutor-table">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- No Tutors State -->
+      <div id="no-tutors-state" class="empty-state d-none">
+        <i class="fas fa-user-tie"></i>
+        <h5>No Tutors Found</h5>
+        <p>No tutors match your current filter criteria, or no tutors have been added yet.</p>
+        <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#addTutorModal">
+          <i class="fas fa-plus"></i> Add New Tutor
+        </button>
+      </div>
+
+      <!-- Pagination -->
+      <nav>
+        <ul class="pagination justify-content-center mt-4" id="pagination">
+          <!-- Pagination generated dynamically -->
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Add/Edit Tutor Modal -->
+  <div class="modal fade" id="addTutorModal" tabindex="-1" aria-labelledby="addTutorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addTutorModalLabel">Add New Tutor</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="tutor-form">
+            <input type="hidden" id="tutor-id">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="tutor-name" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="tutor-name" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="tutor-email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="tutor-email" required>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="tutor-phone" class="form-label">Phone</label>
+                <input type="tel" class="form-control" id="tutor-phone" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="hourly-rate" class="form-label">Hourly Rate ($)</label>
+                <input type="number" class="form-control" id="hourly-rate" required min="0" step="0.01">
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="bio" class="form-label">Bio</label>
+              <textarea class="form-control" id="bio" rows="3"></textarea>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="education" class="form-label">Education</label>
+                <input type="text" class="form-control" id="education" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="experience" class="form-label">Experience (years)</label>
+                <input type="number" class="form-control" id="experience" required min="0">
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Subjects</label>
+              <div class="border p-3 rounded">
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" id="subject-OOP" value="OOP">
+                  <label class="form-check-label" for="subject-OOP">OOP</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" id="subject-DSA" value="DSA">
+                  <label class="form-check-label" for="subject-DSA">DSA</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" id="subject-DM" value="DM">
+                  <label class="form-check-label" for="subject-DM">DM</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" id="subject-TW" value="TW">
+                  <label class="form-check-label" for="subject-TW">TW</label>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Availability</label>
+              <div class="border p-3 rounded">
+                <div class="mb-2">
+                  <label class="form-label">Monday</label>
+                  <div class="input-group">
+                    <input type="time" class="form-control" id="monday-start">
+                    <span class="input-group-text">to</span>
+                    <input type="time" class="form-control" id="monday-end">
+                  </div>
+                </div>
+                <div class="mb-2">
+                  <label class="form-label">Wednesday</label>
+                  <div class="input-group">
+                    <input type="time" class="form-control" id="wednesday-start">
+                    <span class="input-group-text">to</span>
+                    <input type="time" class="form-control" id="wednesday-end">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Status</label>
+              <div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="status" id="status-active" value="active">
+                  <label class="form-check-label" for="status-active">Active</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="status" id="status-pending" value="pending" checked>
+                  <label class="form-check-label" for="status-pending">Pending</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="status" id="status-inactive" value="inactive">
+                  <label class="form-check-label" for="status-inactive">Inactive</label>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="rating" class="form-label">Rating (0-5)</label>
+              <input type="number" class="form-control" id="rating" min="0" max="5" step="0.1" value="4.5">
+            </div>
+            <div class="mb-3">
+              <label for="profile-pic" class="form-label">Profile Picture URL</label>
+              <input type="text" class="form-control" id="profile-pic" placeholder="https://example.com/profile.jpg">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="save-tutor-btn">Save Tutor</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this tutor? This action cannot be undone.</p>
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            Deleting a tutor will remove all associated data, including bookings and reviews.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" id="confirm-delete-btn">
+            <i class="fas fa-trash me-2"></i>Delete Tutor
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 TuitionConnect. All rights reserved.
+  </footer>
+
+  <!-- Notification Center -->
+  <div class="notification-center" id="notificationCenter"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    // Initialize AOS
+    AOS.init({
+      duration: 800,
+      once: true
+    });
+
+    // Global variables
+    let tutors = [];
+    let filteredTutors = [];
+    let currentPage = 1;
+    const tutorsPerPage = 5;
+    let currentTutorId = null;
+    const apiUrl = 'http://localhost:8080/api/tutors?sortBy=experienceAndRating';
+
+    // DOM Elements
+    const loadingState = document.getElementById('loading-state');
+    const errorState = document.getElementById('error-state');
+    const tutorsTableContainer = document.getElementById('tutors-table-container');
+    const noTutorsState = document.getElementById('no-tutors-state');
+    const tutorTable = document.getElementById('tutor-table');
+    const pagination = document.getElementById('pagination');
+    const subjectFilter = document.getElementById('subject-filter');
+    const statusFilter = document.getElementById('status-filter');
+    const searchInput = document.getElementById('search-input');
+    const tutorForm = document.getElementById('tutor-form');
+    const saveTutorBtn = document.getElementById('save-tutor-btn');
+    const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+
+    // Update auth buttons based on login state
+    function updateAuthButtons() {
+      const authButtons = document.getElementById('authButtons');
+      const user = JSON.parse(localStorage.getItem('user'));
+
+      if (user) {
+        // Get user details including profile picture
+        const users = JSON.parse(localStorage.getItem(user.role === 'tutor' ? 'tutors' : 'students') || '[]');
+        const userDetails = users.find(u => u.email === user.email);
+        const profilePic = userDetails?.profilePicture || 'https://via.placeholder.com/150';
+
+        // User is logged in
+        authButtons.innerHTML = `
+          <div class="d-flex align-items-center">
+            <div class="profile-dropdown">
+              <img src="${profilePic}" alt="Profile" class="profile-pic" id="profileDropdownBtn">
+              <div class="profile-dropdown-menu" id="profileDropdownMenu">
+                <div class="profile-header-item">
+                  <img src="${profilePic}" alt="Profile" class="profile-header-pic">
+                  <div class="profile-header-info">
+                    <div class="name">${user.name}</div>
+                    <div class="email">${user.email}</div>
+                  </div>
+                </div>
+                <div class="dropdown-divider"></div>
+                <a href="viewprofile.html" class="dropdown-item">
+                  <i class="fas fa-id-card"></i>
+                  View Profile
+                </a>
+                <a href="viewbooking.html" class="dropdown-item">
+                  <i class="fas fa-calendar-check"></i>
+                  My Bookings
+                </a>
+                <div class="dropdown-divider"></div>
+                <a onclick="logout()" class="dropdown-item">
+                  <i class="fas fa-sign-out-alt"></i>
+                  Sign Out
+                </a>
+              </div>
+            </div>
+            <button class="dark-toggle ms-2" onclick="toggleDarkMode()">
+              <i class="fas fa-moon"></i>
+            </button>
+          </div>
+        `;
+
+        // Add click event listener for profile dropdown
+        const profileBtn = document.getElementById('profileDropdownBtn');
+        const dropdownMenu = document.getElementById('profileDropdownMenu');
+        
+        profileBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+          dropdownMenu.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+          if (!e.target.closest('.profile-dropdown')) {
+            dropdownMenu.style.display = 'none';
+            dropdownMenu.classList.remove('show');
+          }
+        });
+
+        // Check if user is admin
+        if (user.role !== 'admin') {
+          showNotification('Unauthorized access! Redirecting to home page...', 'danger');
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 2000);
+        }
+      } else {
+        // User is not logged in
+        showNotification('Please login to access this page', 'warning');
+        setTimeout(() => {
+          window.location.href = 'Login.html';
+        }, 1500);
+      }
+    }
+
+    // Logout function
+    function logout() {
+      localStorage.removeItem('user');
+      updateAuthButtons();
+      showNotification('Successfully logged out');
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 1500);
+    }
+
+    // Toggle dark mode
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      const darkToggle = document.querySelector('.dark-toggle i');
+      if (document.body.classList.contains('dark-mode')) {
+        darkToggle.classList.remove('fa-moon');
+        darkToggle.classList.add('fa-sun');
+        localStorage.setItem('darkMode', 'true');
+      } else {
+        darkToggle.classList.remove('fa-sun');
+        darkToggle.classList.add('fa-moon');
+        localStorage.setItem('darkMode', 'false');
+      }
+    }
+
+    // Load tutors from API
+    async function loadTutors() {
+      // Show loading state
+      loadingState.classList.remove('d-none');
+      errorState.classList.add('d-none');
+      tutorsTableContainer.classList.add('d-none');
+      
+      try {
+        // Get filter values
+        const subjectValue = subjectFilter.value;
+        const statusValue = statusFilter.value;
+        const searchValue = searchInput.value.toLowerCase();
+        
+        // Construct URL with query parameters if needed
+        let url = apiUrl;
+        const params = [];
+        if (subjectValue) params.push(`subject=${subjectValue}`);
+        if (statusValue) params.push(`status=${statusValue}`);
+        if (params.length > 0) url += '?' + params.join('&');
+        
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        tutors = await response.json();
+        
+        // Apply search filter if search term exists
+        if (searchValue) {
+          tutors = tutors.filter(tutor => 
+            (tutor.fullName && tutor.fullName.toLowerCase().includes(searchValue)) ||
+            (tutor.email && tutor.email.toLowerCase().includes(searchValue)) ||
+            (tutor.subjects && tutor.subjects.some(subject => subject.toLowerCase().includes(searchValue)))
+          );
+        }
+        
+        filteredTutors = [...tutors];
+        
+        // Hide loading state
+        loadingState.classList.add('d-none');
+        
+        // Show tutors table or no tutors state
+        tutorsTableContainer.classList.remove('d-none');
+        
+        if (filteredTutors.length === 0) {
+          noTutorsState.classList.remove('d-none');
+          tutorTable.innerHTML = '';
+        } else {
+          noTutorsState.classList.add('d-none');
+          displayTutors();
+        }
+        
+        // Update pagination
+        updatePagination();
+        
+      } catch (error) {
+        console.error('Error loading tutors:', error);
+        loadingState.classList.add('d-none');
+        errorState.classList.remove('d-none');
+      }
+    }
+
+    // Display tutors on current page
+    function displayTutors() {
+      const startIndex = (currentPage - 1) * tutorsPerPage;
+      const endIndex = startIndex + tutorsPerPage;
+      const pageTutors = filteredTutors.slice(startIndex, endIndex);
+      
+      tutorTable.innerHTML = '';
+      
+      pageTutors.forEach(tutor => {
+        const row = document.createElement('tr');
+        
+        // Format subjects as badges
+        const subjectBadges = Array.isArray(tutor.subjects) 
+          ? tutor.subjects.map(subject => `<span class="subject-badge">${subject}</span>`).join(' ')
+          : '';
+        
+        // Get status badge class
+        let statusClass = 'badge-warning';
+        if (tutor.status === 'active') statusClass = 'badge-success';
+        if (tutor.status === 'inactive') statusClass = 'badge-danger';
+        
+        row.innerHTML = `
+          <td>
+            <img src="${tutor.profilePicture || 'https://via.placeholder.com/50'}" 
+                 alt="${tutor.fullName || 'Tutor'}" 
+                 width="50" 
+                 height="50"
+                 class="rounded-circle object-fit-cover">
+          </td>
+          <td>
+            <div class="d-flex flex-column">
+              <span class="fw-bold">${tutor.fullName || 'Unknown'}</span>
+              <small class="text-muted">${tutor.email || 'No email'}</small>
+            </div>
+          </td>
+          <td>${subjectBadges || 'None specified'}</td>
+          <td>${tutor.experienceYears || '0'} years</td>
+          <td>$${(tutor.hourlyRate || 0).toFixed(2)}/hr</td>
+          <td>
+            <div class="d-flex align-items-center">
+              <i class="fas fa-star text-warning me-1"></i>
+              <span>${tutor.rating || 'New'}</span>
+            </div>
+          </td>
+          <td>
+            <span class="badge ${statusClass}">
+              ${tutor.status ? tutor.status.charAt(0).toUpperCase() + tutor.status.slice(1) : 'Inactive'}
+            </span>
+          </td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-outline-primary btn-sm" onclick="editTutor('${tutor.id}')">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-outline-danger btn-sm" onclick="showDeleteModal('${tutor.id}')">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        `;
+        
+        tutorTable.appendChild(row);
+      });
+    }
+
+    // Update pagination controls
+    function updatePagination() {
+      const totalPages = Math.ceil(filteredTutors.length / tutorsPerPage);
+      
+      pagination.innerHTML = '';
+      
+      // Add Previous button
+      const prevLi = document.createElement('li');
+      prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+      prevLi.innerHTML = `
+        <a class="page-link" href="#" aria-label="Previous" ${currentPage > 1 ? 'onclick="changePage(' + (currentPage - 1) + ')"' : ''}>
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      `;
+      pagination.appendChild(prevLi);
+      
+      // Add page numbers
+      for (let i = 1; i <= totalPages; i++) {
+        const li = document.createElement('li');
+        li.className = `page-item ${currentPage === i ? 'active' : ''}`;
+        li.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i})">${i}</a>`;
+        pagination.appendChild(li);
+      }
+      
+      // Add Next button
+      const nextLi = document.createElement('li');
+      nextLi.className = `page-item ${currentPage === totalPages || totalPages === 0 ? 'disabled' : ''}`;
+      nextLi.innerHTML = `
+        <a class="page-link" href="#" aria-label="Next" ${currentPage < totalPages ? 'onclick="changePage(' + (currentPage + 1) + ')"' : ''}>
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      `;
+      pagination.appendChild(nextLi);
+    }
+
+    // Change current page
+    function changePage(page) {
+      currentPage = page;
+      displayTutors();
+      updatePagination();
+      window.scrollTo(0, 0);
+    }
+
+    // Edit tutor handler
+    function editTutor(id) {
+      currentTutorId = id;
+      const tutor = tutors.find(t => t.id === id);
+      
+      if (!tutor) {
+        showNotification('Tutor not found', 'danger');
+        return;
+      }
+      
+      // Update modal title
+      document.getElementById('addTutorModalLabel').textContent = 'Edit Tutor';
+      
+      // Fill form with tutor data
+      document.getElementById('tutor-id').value = tutor.id;
+      document.getElementById('tutor-name').value = tutor.fullName || '';
+      document.getElementById('tutor-email').value = tutor.email || '';
+      document.getElementById('tutor-phone').value = tutor.phone || '';
+      document.getElementById('hourly-rate').value = tutor.hourlyRate || 0;
+      document.getElementById('bio').value = tutor.bio || '';
+      document.getElementById('education').value = tutor.education || '';
+      document.getElementById('experience').value = tutor.experienceYears || 0;
+      document.getElementById('rating').value = tutor.rating || 4.5;
+      document.getElementById('profile-pic').value = tutor.profilePicture || '';
+      
+      // Set status radio button
+      const statusValue = tutor.status || 'pending';
+      document.querySelector(`input[name="status"][value="${statusValue}"]`).checked = true;
+      
+      // Clear subject checkboxes first
+      document.querySelectorAll('input[id^="subject-"]').forEach(checkbox => {
+        checkbox.checked = false;
+      });
+      
+      // Set subject checkboxes
+      if (Array.isArray(tutor.subjects)) {
+        tutor.subjects.forEach(subject => {
+          const checkbox = document.getElementById(`subject-${subject}`);
+          if (checkbox) checkbox.checked = true;
+        });
+      }
+      
+      // Set availability times
+      document.getElementById('monday-start').value = '';
+      document.getElementById('monday-end').value = '';
+      document.getElementById('wednesday-start').value = '';
+      document.getElementById('wednesday-end').value = '';
+      
+      if (Array.isArray(tutor.availability)) {
+        tutor.availability.forEach(avail => {
+          if (avail.day === 'Monday') {
+            document.getElementById('monday-start').value = avail.startTime || '';
+            document.getElementById('monday-end').value = avail.endTime || '';
+          } else if (avail.day === 'Wednesday') {
+            document.getElementById('wednesday-start').value = avail.startTime || '';
+            document.getElementById('wednesday-end').value = avail.endTime || '';
+          }
+        });
+      }
+      
+      // Show modal
+      const bsModal = new bootstrap.Modal(document.getElementById('addTutorModal'));
+      bsModal.show();
+    }
+
+    // Show delete confirmation modal
+    function showDeleteModal(id) {
+      currentTutorId = id;
+      const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+      deleteModal.show();
+    }
+
+    // Get form data for save/update
+    function getFormData() {
+      // Get selected subjects
+      const selectedSubjects = [];
+      document.querySelectorAll('input[id^="subject-"]:checked').forEach(checkbox => {
+        selectedSubjects.push(checkbox.value);
+      });
+      
+      // Get availability
+      const availability = [];
+      
+      // Monday availability
+      const mondayStart = document.getElementById('monday-start').value;
+      const mondayEnd = document.getElementById('monday-end').value;
+      if (mondayStart && mondayEnd) {
+        availability.push({
+          day: 'Monday',
+          startTime: mondayStart,
+          endTime: mondayEnd
+        });
+      }
+      
+      // Wednesday availability
+      const wednesdayStart = document.getElementById('wednesday-start').value;
+      const wednesdayEnd = document.getElementById('wednesday-end').value;
+      if (wednesdayStart && wednesdayEnd) {
+        availability.push({
+          day: 'Wednesday',
+          startTime: wednesdayStart,
+          endTime: wednesdayEnd
+        });
+      }
+      
+      // Create tutor object
+      return {
+        id: document.getElementById('tutor-id').value || null,
+        fullName: document.getElementById('tutor-name').value,
+        email: document.getElementById('tutor-email').value,
+        phone: document.getElementById('tutor-phone').value,
+        hourlyRate: parseFloat(document.getElementById('hourly-rate').value),
+        bio: document.getElementById('bio').value,
+        education: document.getElementById('education').value,
+        experienceYears: parseInt(document.getElementById('experience').value),
+        subjects: selectedSubjects,
+        availability: availability,
+        status: document.querySelector('input[name="status"]:checked').value,
+        profilePicture: document.getElementById('profile-pic').value,
+        rating: parseFloat(document.getElementById('rating').value),
+        role: "tutor"
+      };
+    }
+
+    // Save or update tutor
+    async function saveTutor() {
+      try {
+        const tutorData = getFormData();
+        const isEdit = tutorData.id !== null;
+        
+        // API URL and method
+        const url = isEdit ? `${apiUrl}/${tutorData.id}` : `${apiUrl}/register`;
+        const method = isEdit ? 'PUT' : 'POST';
+        
+        // Send request
+        const response = await fetch(url, {
+          method: method,
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(tutorData)
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        // Hide modal
+        bootstrap.Modal.getInstance(document.getElementById('addTutorModal')).hide();
+        
+        // Reset form
+        tutorForm.reset();
+        
+        // Show success notification
+        showNotification(`Tutor ${isEdit ? 'updated' : 'added'} successfully!`, 'success');
+        
+        // Reload tutors
+        loadTutors();
+        
+      } catch (error) {
+        console.error('Error saving tutor:', error);
+        showNotification(`Failed to ${currentTutorId ? 'update' : 'add'} tutor: ${error.message}`, 'danger');
+      }
+    }
+
+    // Delete tutor
+    async function deleteTutor() {
+      if (!currentTutorId) return;
+      
+      try {
+        const response = await fetch(`${apiUrl}/${currentTutorId}`, {
+          method: 'DELETE'
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        // Hide modal
+        bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
+        
+        // Show success notification
+        showNotification('Tutor deleted successfully!', 'success');
+        
+        // Reload tutors
+        loadTutors();
+        
+      } catch (error) {
+        console.error('Error deleting tutor:', error);
+        showNotification(`Failed to delete tutor: ${error.message}`, 'danger');
+        
+        // Hide modal
+        bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
+      }
+    }
+
+    // Show notification
+    function showNotification(message, type = 'info') {
+      const notificationEl = document.createElement('div');
+      notificationEl.className = `alert alert-${type === 'error' ? 'danger' : type} position-fixed top-0 end-0 m-3`;
+      notificationEl.style.zIndex = '1050';
+      notificationEl.style.maxWidth = '400px';
+      notificationEl.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+      notificationEl.style.animation = 'slideInRight 0.3s ease-in-out forwards';
+      
+      notificationEl.innerHTML = `
+        <div class="d-flex align-items-center">
+          <i class="fas ${type === 'error' ? 'fa-exclamation-circle' : type === 'success' ? 'fa-check-circle' : 'fa-info-circle'} me-2"></i>
+          <div>${message}</div>
+          <button type="button" class="btn-close ms-auto" onclick="this.parentElement.parentElement.remove()"></button>
+        </div>
+      `;
+      
+      document.getElementById('notificationCenter').appendChild(notificationEl);
+      
+      // Auto-remove notification after 5 seconds
+      setTimeout(() => {
+        notificationEl.style.animation = 'fadeOut 0.5s ease-in-out forwards';
+        setTimeout(() => {
+          notificationEl.remove();
+        }, 500);
+      }, 5000);
+    }
+
+    // Reset form when modal is closed
+    document.getElementById('addTutorModal').addEventListener('hidden.bs.modal', function() {
+      tutorForm.reset();
+      document.getElementById('addTutorModalLabel').textContent = 'Add New Tutor';
+      document.getElementById('tutor-id').value = '';
+      currentTutorId = null;
+    });
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check dark mode preference
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.querySelector('.dark-toggle i').className = 'fas fa-sun';
+      }
+
+      // Update auth buttons and check admin status
+      updateAuthButtons();
+
+      // Load tutors
+      loadTutors();
+      
+      // Add filter change event listeners
+      subjectFilter.addEventListener('change', function() {
+        currentPage = 1;
+        loadTutors();
+      });
+      
+      statusFilter.addEventListener('change', function() {
+        currentPage = 1;
+        loadTutors();
+      });
+      
+      // Add search input event listener
+      searchInput.addEventListener('input', function() {
+        currentPage = 1;
+        loadTutors();
+      });
+      
+      // Add save button event listener
+      saveTutorBtn.addEventListener('click', saveTutor);
+      
+      // Add confirm delete button event listener
+      confirmDeleteBtn.addEventListener('click', deleteTutor);
+      
+      // Add form submit prevention
+      tutorForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveTutor();
+      });
+    });
+
+    // Add animation styles
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideInRight {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+      
+      @keyframes fadeOut {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+      }
+      
+      .object-fit-cover {
+        object-fit: cover;
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>

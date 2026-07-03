@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TuitionConnect - Terms of Service</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #e6f0ff;
+      --primary-dark: #3a56d4;
+      --secondary: #7209b7;
+      --accent: #4cc9f0;
+      --accent-alt: #f72585;
+      --success: #38b000;
+      --warning: #ffaa00;
+      --danger: #ef233c;
+      --bg-light: #ffffff;
+      --bg-dark: #121212;
+      --bg-light-secondary: #f8f9fa;
+      --bg-dark-secondary: #1e1e1e;
+      --text-light: rgba(255, 255, 255, 0.95);
+      --text-dark: rgba(0, 0, 0, 0.95);
+      --text-muted: rgba(0, 0, 0, 0.6);
+      --text-muted-light: rgba(255, 255, 255, 0.7);
+      --border-light: rgba(0, 0, 0, 0.1);
+      --border-dark: rgba(255, 255, 255, 0.1);
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --transition-base: all 0.3s ease;
+      --transition-slow: all 0.6s ease;
+      --border-radius: 8px;
+      --border-radius-lg: 12px;
+      --spacing-unit: 1rem;
+    }
+    
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition-slow);
+      line-height: 1.6;
+    }
+    
+    body.dark-mode {
+      background: var(--bg-dark);
+      color: var(--text-light);
+    }
+
+    /* Navigation */
+    nav {
+      background: var(--bg-light);
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+      border-bottom: 1px solid var(--border-light);
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode nav {
+      background: var(--bg-dark);
+      border-bottom: 1px solid var(--border-dark);
+    }
+    
+    nav.scrolled {
+      padding: 0.75rem 5%;
+      box-shadow: var(--shadow-md);
+    }
+    
+    nav h1 { 
+      font-size: 1.5rem; 
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-content {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    
+    nav ul li a {
+      color: var(--text-dark);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 0;
+      position: relative;
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode nav ul li a {
+      color: var(--text-light);
+    }
+    
+    nav ul li a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition-base);
+    }
+    
+    nav ul li a:hover {
+      color: var(--primary);
+    }
+    
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+    
+    .dark-toggle {
+      background: transparent;
+      color: var(--text-dark);
+      border: none;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode .dark-toggle {
+      color: var(--text-light);
+    }
+    
+    .dark-toggle:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    
+    body.dark-mode .dark-toggle:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .auth-buttons {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    
+    .auth-btn {
+      padding: 0.5rem 1.25rem;
+      border-radius: var(--border-radius-lg);
+      font-weight: 500;
+      text-decoration: none;
+      transition: var(--transition-base);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .login-btn {
+      background: transparent;
+      border: 1px solid var(--border-light);
+      color: var(--text-dark);
+    }
+    
+    body.dark-mode .login-btn {
+      border: 1px solid var(--border-dark);
+      color: var(--text-light);
+    }
+    
+    .login-btn:hover {
+      background: rgba(0, 0, 0, 0.02);
+      border-color: var(--primary);
+    }
+    
+    body.dark-mode .login-btn:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    
+    .signup-btn {
+      background: var(--primary);
+      border: 1px solid var(--primary);
+      color: white;
+    }
+    
+    .signup-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    /* Main Content */
+    .container {
+      padding: 4rem 5%;
+      max-width: 1200px;
+      margin: 0 auto;
+      flex: 1;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 2rem;
+    }
+
+    body.dark-mode .tabs {
+      border-bottom: 1px solid var(--border-dark);
+    }
+
+    .tab-btn {
+      padding: 1rem 1.5rem;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text-muted);
+      position: relative;
+      transition: var(--transition-base);
+    }
+
+    body.dark-mode .tab-btn {
+      color: var(--text-muted-light);
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    body.dark-mode .tab-btn.active {
+      color: var(--primary);
+    }
+
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--primary);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Terms Content */
+    .terms-section h4 {
+      color: var(--primary);
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .terms-section h5 {
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+    }
+
+    .terms-section p {
+      margin-bottom: 1rem;
+      color: var(--text-muted);
+    }
+
+    body.dark-mode .terms-section p {
+      color: var(--text-muted-light);
+    }
+
+    .terms-section ul {
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+
+    .terms-section li {
+      margin-bottom: 0.5rem;
+      color: var(--text-muted);
+    }
+
+    body.dark-mode .terms-section li {
+      color: var(--text-muted-light);
+    }
+
+    .terms-section a {
+      color: var(--primary);
+      text-decoration: none;
+      transition: var(--transition-base);
+    }
+
+    .terms-section a:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--bg-light);
+      padding: 3rem 5% 1.5rem;
+      border-top: 1px solid var(--border-light);
+    }
+    
+    body.dark-mode footer {
+      background: var(--bg-dark);
+      border-top: 1px solid var(--border-dark);
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      text-align: left;
+    }
+    
+    .footer-column h4 {
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+    }
+    
+    .footer-column ul {
+      list-style: none;
+    }
+    
+    .footer-column ul li {
+      margin-bottom: 0.75rem;
+    }
+    
+    .footer-column ul li a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode .footer-column ul li a {
+      color: var(--text-muted-light);
+    }
+    
+    .footer-column ul li a:hover {
+      color: var(--primary);
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    .social-links a {
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode .social-links a {
+      color: var(--text-muted-light);
+    }
+    
+    .social-links a:hover {
+      color: var(--primary);
+    }
+    
+    .copyright {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-light);
+      color: var(--text-muted);
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    
+    body.dark-mode .copyright {
+      border-top: 1px solid var(--border-dark);
+      color: var(--text-muted-light);
+    }
+
+    /* Profile Dropdown Styles */
+    .profile-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .profile-pic {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      object-fit: cover;
+      border: 2px solid var(--primary);
+      transition: var(--transition-base);
+      background-color: #f8f9fa;
+    }
+
+    body.dark-mode .profile-pic {
+      background-color: #2d3238;
+    }
+
+    .profile-pic:hover {
+      border-color: var(--accent);
+      transform: scale(1.05);
+    }
+
+    .profile-dropdown-menu {
+      position: absolute;
+      top: 120%;
+      right: 0;
+      background: var(--bg-light);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-md);
+      min-width: 240px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      border: 1px solid var(--border-light);
+      z-index: 1000;
+      padding: 8px 0;
+    }
+
+    .profile-dropdown-menu.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    body.dark-mode .profile-dropdown-menu {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-dark);
+    }
+
+    .dropdown-item {
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-dark);
+      text-decoration: none;
+      transition: var(--transition-base);
+      cursor: pointer;
+    }
+
+    body.dark-mode .dropdown-item {
+      color: var(--text-light);
+    }
+
+    .dropdown-item:hover {
+      background: rgba(0, 0, 0, 0.05);
+      color: var(--primary);
+    }
+
+    body.dark-mode .dropdown-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .dropdown-divider {
+      height: 1px;
+      background: var(--border-light);
+      margin: 8px 0;
+    }
+
+    body.dark-mode .dropdown-divider {
+      background: var(--border-dark);
+    }
+
+    .profile-header-item {
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    body.dark-mode .profile-header-item {
+      border-bottom: 1px solid var(--border-dark);
+    }
+
+    .profile-header-pic {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .profile-header-info {
+      flex: 1;
+    }
+
+    .profile-header-info .name {
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 2px;
+    }
+
+    .profile-header-info .email {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    body.dark-mode .profile-header-info .name {
+      color: var(--text-light);
+    }
+
+    body.dark-mode .profile-header-info .email {
+      color: var(--text-muted-light);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem 5%;
+      }
+      
+      .nav-content {
+        flex-direction: column;
+        width: 100%;
+      }
+      
+      nav ul {
+        flex-direction: column;
+        gap: 0.75rem;
+        width: 100%;
+      }
+      
+      .auth-buttons {
+        width: 100%;
+        justify-content: center;
+        margin-top: 1rem;
+      }
+      
+      .container {
+        padding: 2rem 5%;
+      }
+      
+      .tabs {
+        flex-direction: column;
+        border-bottom: none;
+      }
+      
+      .tab-btn {
+        border-bottom: 1px solid var(--border-light);
+      }
+      
+      body.dark-mode .tab-btn {
+        border-bottom: 1px solid var(--border-dark);
+      }
+      
+      .tab-btn.active::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav id="mainNav">
+    <h1><i class="fas fa-chalkboard-teacher"></i> TuitionConnect</h1>
+    <div class="nav-content">
+      <ul>
+        <li><a href="Search.html">Book a Tutor</a></li>
+        <li><a href="Subjects.html">Subjects</a></li>
+        <li><a href="viewprofile.html">View Profile</a></li>
+        <li><a href="Contact.html">Contact</a></li>
+        <li><a href="viewbooking.html">View Booking</a></li>
+      </ul>
+      <div class="auth-buttons" id="authButtons">
+        <!-- Auth buttons will be dynamically populated -->
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1 class="text-center mb-4"><i class="fas fa-file-contract me-2"></i>Terms of Service</h1>
+    <p class="text-center mb-5">Please review our terms and policies carefully</p>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="terms-of-service">Terms of Service</button>
+      <button class="tab-btn" data-tab="privacy-policy">Privacy Policy</button>
+      <button class="tab-btn" data-tab="terms-conditions">Terms & Conditions</button>
+    </div>
+
+    <!-- Terms of Service -->
+    <div class="tab-content active" id="terms-of-service">
+      <div class="terms-section">
+        <h4>Terms of Service</h4>
+        <p><small>Last updated: January 1, 2025</small></p>
+        <h5>1. Acceptance of Terms</h5>
+        <p>By accessing or using the TuitionConnect platform ("Service"), you agree to be bound by these Terms of Service ("Terms"). If you disagree with any part of the terms, you may not access the Service.</p>
+        <h5>2. Description of Service</h5>
+        <p>TuitionConnect provides an online platform that connects students with tutors for educational services. We are not responsible for the actual provision of tutoring services, which are solely the responsibility of the tutors.</p>
+        <h5>3. User Accounts</h5>
+        <p>To use certain features of the Service, you must register for an account. You agree to:</p>
+        <ul>
+          <li>Provide accurate and complete information</li>
+          <li>Maintain the security of your password</li>
+          <li>Be responsible for all activities that occur under your account</li>
+          <li>Notify us immediately of any unauthorized use of your account</li>
+        </ul>
+        <h5>4. Booking and Payments</h5>
+        <p>All tutoring sessions must be booked through our platform. Payment processing is handled by our third-party payment processor.</p>
+        <p><strong>Cancellation Policy:</strong> Sessions canceled less than 24 hours before the scheduled time may be subject to a cancellation fee. Tutors may set their own cancellation policies which will be displayed on their profile.</p>
+        <h5>5. User Conduct</h5>
+        <p>You agree not to:</p>
+        <ul>
+          <li>Use the Service for any unlawful purpose</li>
+          <li>Harass, threaten, or intimidate other users</li>
+          <li>Post false or misleading information</li>
+          <li>Attempt to gain unauthorized access to the Service</li>
+          <li>Interfere with or disrupt the Service</li>
+        </ul>
+        <h5>6. Intellectual Property</h5>
+        <p>All content on the Service, including text, graphics, logos, and software, is the property of TuitionConnect or its licensors and is protected by copyright and other intellectual property laws.</p>
+        <h5>7. Limitation of Liability</h5>
+        <p>TuitionConnect shall not be liable for any indirect, incidental, special, consequential or punitive damages resulting from your use of or inability to use the Service.</p>
+        <h5>8. Changes to Terms</h5>
+        <p>We reserve the right to modify these Terms at any time. We will notify users of significant changes through the Service or by email. Your continued use of the Service after such changes constitutes your acceptance of the new Terms.</p>
+        <h5>9. Governing Law</h5>
+        <p>These Terms shall be governed by and construed in accordance with the laws of the jurisdiction where TuitionConnect is established, without regard to its conflict of law provisions.</p>
+        <h5>10. Contact Information</h5>
+        <p>If you have any questions about these Terms, please contact us at <a href="mailto:tutorbuddy110@gmail.com">tutorbuddy110@gmail.com</a>.</p>
+      </div>
+    </div>
+
+    <!-- Privacy Policy -->
+    <div class="tab-content" id="privacy-policy">
+      <div class="terms-section">
+        <h4>Privacy Policy</h4>
+        <p><small>Last Updated: January 1, 2025</small></p>
+        <h5>1. Introduction</h5>
+        <p>Welcome to TuitionConnect. We are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our services.</p>
+        <h5>2. Information We Collect</h5>
+        <p>We may collect the following types of information:</p>
+        <ul>
+          <li><strong>Personal Information:</strong> Name, email address, phone number, payment details, and other contact information.</li>
+          <li><strong>Academic Information:</strong> Subjects of interest, educational background, and tutoring requirements.</li>
+          <li><strong>Usage Data:</strong> Information about how you interact with our website and services.</li>
+          <li><strong>Technical Data:</strong> IP address, browser type, device information, and cookies.</li>
+        </ul>
+        <h5>3. How We Use Your Information</h5>
+        <p>We use the information we collect for the following purposes:</p>
+        <ul>
+          <li>To provide and maintain our tutoring services</li>
+          <li>To match students with appropriate tutors</li>
+          <li>To process payments and bookings</li>
+          <li>To communicate with you about your account and services</li>
+          <li>To improve our website and services</li>
+          <li>To comply with legal obligations</li>
+        </ul>
+        <h5>4. Data Sharing and Disclosure</h5>
+        <p>We may share your information in the following situations:</p>
+        <ul>
+          <li>With tutors to facilitate the tutoring sessions</li>
+          <li>With service providers who assist in our operations (payment processors, hosting providers)</li>
+          <li>When required by law or to protect our rights</li>
+          <li>With your consent for specific purposes</li>
+        </ul>
+        <p>We do not sell your personal information to third parties.</p>
+        <h5>5. Data Security</h5>
+        <p>We implement appropriate technical and organizational measures to protect your personal information. However, no method of transmission over the Internet or electronic storage is 100% secure.</p>
+        <h5>6. Your Rights</h5>
+        <p>Depending on your location, you may have certain rights regarding your personal information:</p>
+        <ul>
+          <li>Right to access and receive a copy of your data</li>
+          <li>Right to rectify inaccurate information</li>
+          <li>Right to request deletion of your data</li>
+          <li>Right to restrict or object to processing</li>
+          <li>Right to data portability</li>
+        </ul>
+        <p>To exercise these rights, please contact us using the information provided below.</p>
+        <h5>7. Cookies and Tracking Technologies</h5>
+        <p>We use cookies and similar tracking technologies to enhance your experience on our website. You can set your browser to refuse all or some cookies, but this may affect certain features.</p>
+        <h5>8. Changes to This Policy</h5>
+        <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new policy on this page and updating the "Last Updated" date.</p>
+        <h5>9. Contact Us</h5>
+        <p>If you have any questions about this Privacy Policy, please contact us:</p>
+        <ul>
+          <li>By email: <a href="mailto:tutorbuddy110@gmail.com">tutorbuddy110@gmail.com</a></li>
+          <li>By visiting our <a href="Contact.html">Contact page</a></li>
+        </ul>
+        <p>This policy is effective as of January 1, 2025.</p>
+      </div>
+    </div>
+
+    <!-- Terms & Conditions -->
+    <div class="tab-content" id="terms-conditions">
+      <div class="terms-section">
+        <h4>Terms & Conditions</h4>
+        <p><small>Last updated: January 1, 2025</small></p>
+        <h5>1. Account Registration</h5>
+        <p>You must provide accurate and complete information when creating an account. You are responsible for maintaining the confidentiality of your login credentials.</p>
+        <h5>2. Use of the Service</h5>
+        <p>You agree not to misuse the services or help anyone else do so. This includes violating any applicable laws or interfering with the operation of the service.</p>
+        <h5>3. Payments and Refunds</h5>
+        <p>TuitionConnect is not responsible for any payments made outside our platform. Refund policies are subject to the agreements between tutors and students.</p>
+        <h5>4. Termination</h5>
+        <p>We reserve the right to suspend or terminate your account if we believe you have violated these terms.</p>
+        <h5>5. Changes</h5>
+        <p>We may update these terms from time to time. Continued use of the platform means you accept the updated terms.</p>
+        <h5>6. Contact Information</h5>
+        <p>If you have any questions about these Terms & Conditions, please contact us at <a href="mailto:tutorbuddy110@gmail.com">tutorbuddy110@gmail.com</a>.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-column">
+        <h4>TuitionConnect</h4>
+        <p>Your personalized path to academic success through quality home tutoring.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+      <div class="footer-column">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="Search.html">Book a Tutor</a></li>
+          <li><a href="Subjects.html">Subjects</a></li>
+          <li><a href="Contact.html">Contact Us</a></li>
+          <li><a href="tutormanagement.html">Tutor Management</a></li>
+          <li><a href="Login.html">Login</a></li>
+          <li><a href="studentregister.html">Register as Student</a></li>
+          <li><a href="tutorregister.html">Register as Tutor</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="Faq.html">FAQ</a></li>
+          <li><a href="Terms of Service.html#privacy-policy">Privacy Policy</a></li>
+          <li><a href="Terms of Service.html">Terms of Service</a></li>
+          <li><a href="Help.html">Help Center</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Contact Info</h4>
+        <ul>
+          <li><i class="fas fa-map-marker-alt"></i> 123 Education St, Learning City</li>
+          <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+          <li><i class="fas fa-envelope"></i> support@tuitionconnect.com</li>
+        </ul>
+      </div>
+    </div>
+    <div class="copyright">
+      © 2025 TuitionConnect. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    // Initialize AOS
+    AOS.init({
+      duration: 800,
+      once: true
+    });
+
+    // Tab functionality
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Remove active class from all buttons and content
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        
+        // Add active class to clicked button and corresponding content
+        btn.classList.add('active');
+        const tabId = btn.getAttribute('data-tab');
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
+
+    // Update auth buttons based on login state
+    function updateAuthButtons() {
+      const authButtons = document.getElementById('authButtons');
+      const user = JSON.parse(localStorage.getItem('user'));
+
+      if (user) {
+        // Get user details including profile picture
+        const users = JSON.parse(localStorage.getItem(user.role === 'tutor' ? 'tutors' : 'students') || '[]');
+        const userDetails = users.find(u => u.email === user.email);
+        const profilePic = userDetails?.profilePicture || 'https://via.placeholder.com/150';
+
+        // User is logged in
+        authButtons.innerHTML = `
+          <div class="d-flex align-items-center">
+            <div class="profile-dropdown">
+              <img src="${profilePic}" alt="Profile" class="profile-pic" id="profileDropdownBtn">
+              <div class="profile-dropdown-menu" id="profileDropdownMenu">
+                <div class="profile-header-item">
+                  <img src="${profilePic}" alt="Profile" class="profile-header-pic">
+                  <div class="profile-header-info">
+                    <div class="name">${user.name}</div>
+                    <div class="email">${user.email}</div>
+                  </div>
+                </div>
+                <div class="dropdown-divider"></div>
+                <a href="viewprofile.html" class="dropdown-item">
+                  <i class="fas fa-id-card"></i>
+                  View Profile
+                </a>
+                <a href="viewbooking.html" class="dropdown-item">
+                  <i class="fas fa-calendar-check"></i>
+                  My Bookings
+                </a>
+                <div class="dropdown-divider"></div>
+                <a onclick="logout()" class="dropdown-item">
+                  <i class="fas fa-sign-out-alt"></i>
+                  Sign Out
+                </a>
+              </div>
+            </div>
+            <button class="dark-toggle ms-2" onclick="toggleDarkMode()">
+              <i class="fas fa-moon"></i>
+            </button>
+          </div>
+        `;
+
+        // Add click event listener for profile dropdown
+        const profileBtn = document.getElementById('profileDropdownBtn');
+        const dropdownMenu = document.getElementById('profileDropdownMenu');
+        
+        profileBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+          dropdownMenu.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+          if (!e.target.closest('.profile-dropdown')) {
+            dropdownMenu.style.display = 'none';
+            dropdownMenu.classList.remove('show');
+          }
+        });
+      } else {
+        // User is not logged in
+        authButtons.innerHTML = `
+          <a href="Login.html" class="auth-btn login-btn">
+            <i class="fas fa-sign-in-alt"></i> Login
+          </a>
+          <a href="studentregister.html" class="auth-btn signup-btn">
+            <i class="fas fa-user-plus"></i> Sign Up
+          </a>
+          <button class="dark-toggle" onclick="toggleDarkMode()">
+            <i class="fas fa-moon"></i>
+          </button>
+        `;
+      }
+    }
+
+    // Logout function
+    function logout() {
+      localStorage.removeItem('user');
+      updateAuthButtons();
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    }
+
+    // Dark mode toggle
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      
+      // Update icon and store preference
+      const darkToggle = document.querySelector('.dark-toggle');
+      darkToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+      localStorage.setItem('darkMode', isDark);
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check dark mode preference
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.querySelector('.dark-toggle').innerHTML = '<i class="fas fa-sun"></i>';
+      }
+
+      // Update auth buttons
+      updateAuthButtons();
+
+      // Navbar scroll effect
+      window.addEventListener('scroll', function() {
+        const nav = document.getElementById('mainNav');
+        if (window.scrollY > 50) {
+          nav.classList.add('scrolled');
+        } else {
+          nav.classList.remove('scrolled');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

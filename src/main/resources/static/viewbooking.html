@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TuitionConnect - View Bookings</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #e6f0ff;
+      --primary-dark: #3a56d4;
+      --secondary: #7209b7;
+      --accent: #4cc9f0;
+      --accent-alt: #f72585;
+      --success: #38b000;
+      --warning: #ffaa00;
+      --danger: #ef233c;
+      --bg-light: #ffffff;
+      --bg-dark: #121212;
+      --bg-light-secondary: #f8f9fa;
+      --bg-dark-secondary: #1e1e1e;
+      --text-light: rgba(255, 255, 255, 0.95);
+      --text-dark: rgba(0, 0, 0, 0.95);
+      --text-muted: rgba(0, 0, 0, 0.6);
+      --text-muted-light: rgba(255, 255, 255, 0.7);
+      --border-light: rgba(0, 0, 0, 0.1);
+      --border-dark: rgba(255, 255, 255, 0.1);
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --transition-base: all 0.3s ease;
+      --transition-slow: all 0.6s ease;
+      --border-radius: 8px;
+      --border-radius-lg: 12px;
+      --spacing-unit: 1rem;
+    }
+    
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition-slow);
+      line-height: 1.6;
+    }
+    
+    body.dark-mode {
+      background: var(--bg-dark);
+      color: var(--text-light);
+    }
+    
+    /* Navigation */
+    nav {
+      background: var(--bg-light);
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+      border-bottom: 1px solid var(--border-light);
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode nav {
+      background: var(--bg-dark);
+      border-bottom: 1px solid var(--border-dark);
+    }
+    
+    nav.scrolled {
+      padding: 0.75rem 5%;
+      box-shadow: var(--shadow-md);
+    }
+    
+    nav h1 { 
+      font-size: 1.5rem; 
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-content {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    
+    nav ul li a {
+      color: var(--text-dark);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 0;
+      position: relative;
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode nav ul li a {
+      color: var(--text-light);
+    }
+    
+    nav ul li a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition-base);
+    }
+    
+    nav ul li a:hover {
+      color: var(--primary);
+    }
+    
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+    
+    .dark-toggle {
+      background: transparent;
+      color: var(--text-dark);
+      border: none;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode .dark-toggle {
+      color: var(--text-light);
+    }
+    
+    .dark-toggle:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    
+    body.dark-mode .dark-toggle:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .auth-buttons {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    
+    .auth-btn {
+      padding: 0.5rem 1.25rem;
+      border-radius: var(--border-radius-lg);
+      font-weight: 500;
+      text-decoration: none;
+      transition: var(--transition-base);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .login-btn {
+      background: transparent;
+      border: 1px solid var(--border-light);
+      color: var(--text-dark);
+    }
+    
+    body.dark-mode .login-btn {
+      border: 1px solid var(--border-dark);
+      color: var(--text-light);
+    }
+    
+    .login-btn:hover {
+      background: rgba(0, 0, 0, 0.02);
+      border-color: var(--primary);
+    }
+    
+    body.dark-mode .login-btn:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    
+    .signup-btn {
+      background: var(--primary);
+      border: 1px solid var(--primary);
+      color: white;
+    }
+    
+    .signup-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    /* Main Content */
+    .container {
+      padding: 4rem 5%;
+      flex: 1;
+    }
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .section-header h2 {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+    
+    .section-header p {
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    body.dark-mode .section-header p {
+      color: var(--text-muted-light);
+    }
+    
+    /* Booking Cards */
+    .booking-card {
+      background: var(--bg-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 2rem;
+      border: 1px solid var(--border-light);
+      transition: var(--transition-base);
+      overflow: hidden;
+    }
+    
+    body.dark-mode .booking-card {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-dark);
+    }
+    
+    .booking-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .booking-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    body.dark-mode .booking-header {
+      border-bottom: 1px solid var(--border-dark);
+    }
+    
+    .booking-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    body.dark-mode .booking-title {
+      color: var(--text-light);
+    }
+    
+    .booking-status {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    
+    .status-upcoming {
+      background: linear-gradient(45deg, var(--success), #20c997);
+      color: white;
+    }
+    
+    .status-completed {
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      color: white;
+    }
+    
+    .status-cancelled {
+      background: linear-gradient(45deg, var(--danger), var(--warning));
+      color: white;
+    }
+    
+    .booking-body {
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    
+    .booking-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .info-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+    
+    .info-icon {
+      color: var(--primary);
+      font-size: 1.1rem;
+      margin-top: 0.2rem;
+    }
+    
+    .info-content h4 {
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
+      color: var(--text-dark);
+    }
+    
+    body.dark-mode .info-content h4 {
+      color: var(--text-light);
+    }
+    
+    .info-content p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    
+    body.dark-mode .info-content p {
+      color: var(--text-muted-light);
+    }
+    
+    .booking-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--border-radius);
+      font-weight: 500;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition-base);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+    }
+    
+    .btn-outline:hover {
+      background: rgba(67, 97, 238, 0.1);
+    }
+    
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+    
+    .btn-success:hover {
+      background: #2e9500;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background: #d11f35;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .btn-warning {
+      background: var(--warning);
+      color: white;
+    }
+    
+    .btn-warning:hover {
+      background: #e69900;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 0;
+    }
+    
+    .empty-icon {
+      font-size: 4rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+    
+    body.dark-mode .empty-icon {
+      color: var(--text-muted-light);
+    }
+    
+    .empty-state h3 {
+      margin-bottom: 1rem;
+      color: var(--text-dark);
+    }
+    
+    body.dark-mode .empty-state h3 {
+      color: var(--text-light);
+    }
+    
+    .empty-state p {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    body.dark-mode .empty-state p {
+      color: var(--text-muted-light);
+    }
+    
+    /* Nav Tabs */
+    .nav-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 2rem;
+    }
+    
+    body.dark-mode .nav-tabs {
+      border-bottom: 1px solid var(--border-dark);
+    }
+    
+    .nav-tab {
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      position: relative;
+      color: var(--text-muted);
+      font-weight: 500;
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode .nav-tab {
+      color: var(--text-muted-light);
+    }
+    
+    .nav-tab.active {
+      color: var(--primary);
+    }
+    
+    .nav-tab::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition-base);
+    }
+    
+    .nav-tab.active::after {
+      width: 100%;
+    }
+    
+    .nav-tab:hover {
+      color: var(--primary);
+    }
+    
+    /* Footer */
+    footer {
+      background: var(--bg-light);
+      padding: 3rem 5% 1.5rem;
+      border-top: 1px solid var(--border-light);
+    }
+    
+    body.dark-mode footer {
+      background: var(--bg-dark);
+      border-top: 1px solid var(--border-dark);
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      text-align: left;
+    }
+    
+    .footer-column h4 {
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+    }
+    
+    .footer-column ul {
+      list-style: none;
+    }
+    
+    .footer-column ul li {
+      margin-bottom: 0.75rem;
+    }
+    
+    .footer-column ul li a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode .footer-column ul li a {
+      color: var(--text-muted-light);
+    }
+    
+    .footer-column ul li a:hover {
+      color: var(--primary);
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    .social-links a {
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode .social-links a {
+      color: var(--text-muted-light);
+    }
+    
+    .social-links a:hover {
+      color: var(--primary);
+    }
+    
+    .copyright {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-light);
+      color: var(--text-muted);
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    
+    body.dark-mode .copyright {
+      border-top: 1px solid var(--border-dark);
+      color: var(--text-muted-light);
+    }
+    
+    /* Profile Dropdown */
+    .profile-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .profile-pic {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      object-fit: cover;
+      border: 2px solid var(--primary);
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode .profile-pic {
+      border-color: var(--accent);
+    }
+    
+    .profile-pic:hover {
+      transform: scale(1.05);
+    }
+    
+    .profile-dropdown-menu {
+      position: absolute;
+      top: 120%;
+      right: 0;
+      background: var(--bg-light);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-md);
+      min-width: 240px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      border: 1px solid var(--border-light);
+      z-index: 1000;
+      padding: 8px 0;
+    }
+    
+    body.dark-mode .profile-dropdown-menu {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-dark);
+    }
+    
+    .profile-dropdown-menu.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    
+    .dropdown-item {
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-dark);
+      text-decoration: none;
+      transition: var(--transition-base);
+      cursor: pointer;
+    }
+    
+    body.dark-mode .dropdown-item {
+      color: var(--text-light);
+    }
+    
+    .dropdown-item:hover {
+      background: rgba(0, 0, 0, 0.05);
+      color: var(--primary);
+    }
+    
+    body.dark-mode .dropdown-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .dropdown-divider {
+      height: 1px;
+      background: var(--border-light);
+      margin: 8px 0;
+    }
+    
+    body.dark-mode .dropdown-divider {
+      background: var(--border-dark);
+    }
+    
+    .profile-header-item {
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    
+    body.dark-mode .profile-header-item {
+      border-bottom: 1px solid var(--border-dark);
+    }
+    
+    .profile-header-pic {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .profile-header-info {
+      flex: 1;
+    }
+    
+    .profile-header-info .name {
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 2px;
+    }
+    
+    .profile-header-info .email {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    
+    body.dark-mode .profile-header-info .name {
+      color: var(--text-light);
+    }
+    
+    body.dark-mode .profile-header-info .email {
+      color: var(--text-muted-light);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .booking-body {
+        grid-template-columns: 1fr;
+      }
+      
+      .booking-actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+      
+      .btn {
+        flex: 1 0 auto;
+      }
+      
+      .nav-tabs {
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 0.5rem;
+      }
+      
+      .nav-tab {
+        padding: 0.75rem 1rem;
+      }
+    }
+    
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.5s ease forwards;
+    }
+  </style>
+</head>
+<body>
+  <nav id="mainNav">
+    <h1><i class="fas fa-chalkboard-teacher"></i> TuitionConnect</h1>
+    <div class="nav-content">
+      <ul>
+        <li><a href="Search.html">Book a Tutor</a></li>
+        <li><a href="Subjects.html">Subjects</a></li>
+        <li><a href="viewprofile.html">View Profile</a></li>
+        <li><a href="Contact.html">Contact</a></li>
+        <li><a href="viewbooking.html">View Booking</a></li>
+      </ul>
+      <div class="auth-buttons" id="authButtons">
+        <!-- Auth buttons will be dynamically populated -->
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="section-header">
+      <h2><i class="fas fa-calendar-check me-2"></i>My Bookings</h2>
+      <p>View and manage your upcoming and past tutoring sessions</p>
+    </div>
+
+    <div class="nav-tabs">
+      <div class="nav-tab active" onclick="filterBookings('All')">All Bookings</div>
+      <div class="nav-tab" onclick="filterBookings('Upcoming')">Upcoming</div>
+      <div class="nav-tab" onclick="filterBookings('Completed')">Completed</div>
+      <div class="nav-tab" onclick="filterBookings('Cancelled')">Cancelled</div>
+    </div>
+
+    <div id="bookings-list">
+      <!-- Bookings will be populated here -->
+    </div>
+
+    <div id="no-bookings" class="empty-state d-none">
+      <div class="empty-icon">
+        <i class="fas fa-calendar-times"></i>
+      </div>
+      <h3>No Bookings Found</h3>
+      <p>You don't have any bookings in this category. Start by booking a tutor to get help with your studies.</p>
+      <a href="Search.html" class="btn btn-primary">
+        <i class="fas fa-search me-2"></i>Find a Tutor
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-column">
+        <h4>TuitionConnect</h4>
+        <p>Your personalized path to academic success through quality home tutoring.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+      <div class="footer-column">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="Search.html">Book a Tutor</a></li>
+          <li><a href="Subjects.html">Subjects</a></li>
+          <li><a href="Contact.html">Contact Us</a></li>
+          <li><a href="tutormanagement.html">Tutor Management</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="Faq.html">FAQ</a></li>
+          <li><a href="Terms of Service.html">Privacy Policy</a></li>
+          <li><a href="Terms of Service.html">Terms of Service</a></li>
+          <li><a href="Contact.html">Help Center</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Contact Info</h4>
+        <ul>
+          <li><i class="fas fa-map-marker-alt"></i> 123 Education St, Learning City</li>
+          <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+          <li><i class="fas fa-envelope"></i> support@tuitionconnect.com</li>
+        </ul>
+      </div>
+    </div>
+    <div class="copyright">
+      © 2025 TuitionConnect. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    let bookings = [];
+    let currentFilter = 'All';
+
+    // Initialize AOS
+    AOS.init({
+      duration: 800,
+      once: true
+    });
+
+    function updateAuthButtons() {
+      const authButtons = document.getElementById('authButtons');
+      const user = JSON.parse(localStorage.getItem('user'));
+
+      if (user) {
+        // Get user details including profile picture
+        const users = JSON.parse(localStorage.getItem(user.role === 'tutor' ? 'tutors' : 'students') || '[]');
+        const userDetails = users.find(u => u.email === user.email);
+        const profilePic = userDetails?.profilePicture || 'https://via.placeholder.com/150';
+
+        // User is logged in
+        authButtons.innerHTML = `
+          <div class="d-flex align-items-center">
+            <div class="profile-dropdown">
+              <img src="${profilePic}" alt="Profile" class="profile-pic" id="profileDropdownBtn">
+              <div class="profile-dropdown-menu" id="profileDropdownMenu">
+                <div class="profile-header-item">
+                  <img src="${profilePic}" alt="Profile" class="profile-header-pic">
+                  <div class="profile-header-info">
+                    <div class="name">${user.name}</div>
+                    <div class="email">${user.email}</div>
+                  </div>
+                </div>
+                <div class="dropdown-divider"></div>
+                <a href="viewprofile.html" class="dropdown-item">
+                  <i class="fas fa-id-card"></i>
+                  View Profile
+                </a>
+                <a href="viewbooking.html" class="dropdown-item">
+                  <i class="fas fa-calendar-check"></i>
+                  My Bookings
+                </a>
+                <div class="dropdown-divider"></div>
+                <a onclick="logout()" class="dropdown-item">
+                  <i class="fas fa-sign-out-alt"></i>
+                  Sign Out
+                </a>
+              </div>
+            </div>
+            <button class="dark-toggle ms-2" onclick="toggleDarkMode()">
+              <i class="fas fa-moon"></i>
+            </button>
+          </div>
+        `;
+
+        // Add click event listener for profile dropdown
+        const profileBtn = document.getElementById('profileDropdownBtn');
+        const dropdownMenu = document.getElementById('profileDropdownMenu');
+        
+        profileBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+          dropdownMenu.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+          if (!e.target.closest('.profile-dropdown')) {
+            dropdownMenu.style.display = 'none';
+            dropdownMenu.classList.remove('show');
+          }
+        });
+      } else {
+        // User is not logged in
+        authButtons.innerHTML = `
+          <a href="Login.html" class="auth-btn login-btn">
+            <i class="fas fa-sign-in-alt"></i> Login
+          </a>
+          <div class="signup-dropdown">
+            <a href="#" class="auth-btn signup-btn">
+              <i class="fas fa-user-plus"></i> Sign Up
+            </a>
+            <div class="dropdown-menu">
+              <a href="studentregister.html">As Student</a>
+              <a href="tutorregister.html">As Tutor</a>
+            </div>
+          </div>
+          <button class="dark-toggle" onclick="toggleDarkMode()">
+            <i class="fas fa-moon"></i>
+          </button>
+        `;
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('user');
+      window.location.href = 'index.html';
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      const navbar = document.querySelector('nav');
+      if (document.body.classList.contains('dark-mode')) {
+        navbar.classList.remove('bg-light');
+        navbar.classList.add('bg-dark');
+        document.querySelector('.dark-toggle').innerHTML = '<i class="fas fa-sun"></i>';
+      } else {
+        navbar.classList.remove('bg-dark');
+        navbar.classList.add('bg-light');
+        document.querySelector('.dark-toggle').innerHTML = '<i class="fas fa-moon"></i>';
+      }
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+
+    if (localStorage.getItem('darkMode') === 'true') {
+      toggleDarkMode();
+    }
+
+    function checkNewBooking() {
+      const newBookingData = localStorage.getItem('newBooking');
+      if (newBookingData) {
+        const booking = JSON.parse(newBookingData);
+        bookings.unshift({
+          id: Date.now(),
+          status: 'Upcoming',
+          ...booking
+        });
+        localStorage.removeItem('newBooking');
+        filterBookings(currentFilter);
+        showNotification('New booking added successfully!');
+      }
+    }
+
+    function showNotification(message, type = 'success') {
+      const notification = document.createElement('div');
+      notification.className = 'notification';
+      notification.innerHTML = `
+        <div class="notification-content ${type === 'warning' ? 'bg-warning text-dark' : ''}">
+          <i class="fas ${type === 'warning' ? 'fa-exclamation-triangle' : 'fa-check-circle'} me-2"></i>
+          ${message}
+        </div>
+      `;
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+
+    function filterBookings(category) {
+      currentFilter = category;
+      document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.querySelector(`.nav-tab:nth-child(${
+        category === 'All' ? 1 : 
+        category === 'Upcoming' ? 2 : 
+        category === 'Completed' ? 3 : 4
+      })`).classList.add('active');
+
+      const filteredBookings = category === 'All' ? bookings : bookings.filter(booking => booking.status === category);
+      const bookingsList = document.getElementById('bookings-list');
+      const noBookings = document.getElementById('no-bookings');
+      bookingsList.innerHTML = '';
+
+      if (filteredBookings.length === 0) {
+        noBookings.classList.remove('d-none');
+        return;
+      }
+
+      noBookings.classList.add('d-none');
+      filteredBookings.forEach((booking, index) => {
+        const card = document.createElement('div');
+        card.className = 'booking-card fade-in';
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.innerHTML = `
+          <div class="booking-header">
+            <div class="booking-title">
+              <i class="fas fa-book-open"></i>
+              ${booking.subject}
+            </div>
+            <div class="booking-status ${booking.status === 'Upcoming' ? 'status-upcoming' : 
+                                       booking.status === 'Completed' ? 'status-completed' : 'status-cancelled'}">
+              ${booking.status}
+            </div>
+          </div>
+          <div class="booking-body">
+            <div class="booking-info">
+              <div class="info-group">
+                <i class="fas fa-user-tie info-icon"></i>
+                <div class="info-content">
+                  <h4>Tutor</h4>
+                  <p>${booking.tutor} (${booking.specialization})</p>
+                </div>
+              </div>
+              <div class="info-group">
+                <i class="fas fa-star info-icon"></i>
+                <div class="info-content">
+                  <h4>Rating</h4>
+                  <p>${booking.rating} (${booking.reviews} reviews)</p>
+                </div>
+              </div>
+              <div class="info-group">
+                <i class="fas fa-clock info-icon"></i>
+                <div class="info-content">
+                  <h4>Experience</h4>
+                  <p>${booking.experience} years</p>
+                </div>
+              </div>
+            </div>
+            <div class="booking-info">
+              <div class="info-group">
+                <i class="fas fa-calendar-alt info-icon"></i>
+                <div class="info-content">
+                  <h4>Date</h4>
+                  <p>${booking.date}</p>
+                </div>
+              </div>
+              <div class="info-group">
+                <i class="fas fa-clock info-icon"></i>
+                <div class="info-content">
+                  <h4>Time</h4>
+                  <p>${booking.time}</p>
+                </div>
+              </div>
+              <div class="info-group">
+                <i class="fas fa-hourglass-half info-icon"></i>
+                <div class="info-content">
+                  <h4>Duration</h4>
+                  <p>${booking.duration}</p>
+                </div>
+              </div>
+              <div class="info-group">
+                <i class="fas fa-dollar-sign info-icon"></i>
+                <div class="info-content">
+                  <h4>Total</h4>
+                  <p>$${booking.total}</p>
+                </div>
+              </div>
+            </div>
+            <div class="booking-actions">
+              ${booking.status === 'Upcoming' ? `
+                <button class="btn btn-success" onclick="joinSession(${booking.id})">
+                  <i class="fas fa-video"></i> Join Session
+                </button>
+                <button class="btn btn-outline" onclick="reschedule(${booking.id})">
+                  <i class="fas fa-calendar-edit"></i> Reschedule
+                </button>
+                <button class="btn btn-danger" onclick="cancelBooking(${booking.id})">
+                  <i class="fas fa-times"></i> Cancel
+                </button>
+              ` : booking.status === 'Completed' ? `
+                <button class="btn btn-outline" onclick="viewNotes(${booking.id})">
+                  <i class="fas fa-file-alt"></i> View Notes
+                </button>
+                <button class="btn btn-warning" onclick="rateSession(${booking.id})">
+                  <i class="fas fa-star"></i> Rate Session
+                </button>
+                <button class="btn btn-primary" onclick="bookAgain(${booking.id})">
+                  <i class="fas fa-redo"></i> Book Again
+                </button>
+              ` : `
+                <button class="btn btn-primary" onclick="bookAgain(${booking.id})">
+                  <i class="fas fa-redo"></i> Book Again
+                </button>
+              `}
+            </div>
+          </div>
+          ${booking.specialRequests ? `
+            <div class="booking-footer" style="padding: 1rem; border-top: 1px solid var(--border-light);">
+              <div class="info-group">
+                <i class="fas fa-comment-dots info-icon"></i>
+                <div class="info-content">
+                  <h4>Special Requests</h4>
+                  <p>${booking.specialRequests}</p>
+                </div>
+              </div>
+            </div>
+          ` : ''}
+        `;
+        bookingsList.appendChild(card);
+      });
+    }
+
+    async function fetchBookings() {
+      try {
+        // Show loading state
+        const bookingsList = document.getElementById('bookings-list');
+        bookingsList.innerHTML = '<div class="text-center my-4"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">Loading your bookings...</p></div>';
+        
+        // Fetch bookings from API
+        const response = await fetch('http://localhost:8080/api/bookings/all');
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch bookings');
+        }
+        
+        const data = await response.json();
+        
+        // Transform API data to our bookings format
+        bookings = data.map(booking => {
+          // Parse date for display
+          let formattedDate = "Not specified";
+          if (booking.sessionDate) {
+            try {
+              let sessionDate = new Date(booking.sessionDate);
+              formattedDate = sessionDate.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              });
+            } catch (e) {
+              console.warn("Invalid date format:", booking.sessionDate);
+            }
+          }
+          
+          // Calculate time range
+          let timeRange = `${booking.startTime || 'Not set'} - ${booking.endTime || 'Not set'}`;
+          
+          // Map API status to UI status
+          let uiStatus = 'Upcoming';
+          if (booking.status.toLowerCase() === 'completed') {
+            uiStatus = 'Completed';
+          } else if (booking.status.toLowerCase() === 'cancelled') {
+            uiStatus = 'Cancelled';
+          }
+          
+          return {
+            id: booking.id,
+            subject: booking.subject || 'Unspecified Subject',
+            tutor: `Tutor #${booking.tutorId}`, // Replace with actual tutor name if available
+            tutorId: booking.tutorId,
+            specialization: booking.subject || 'General Tutoring', // Use subject as specialization if not provided
+            experience: 'N/A', // Add if available from tutor data
+            rating: 4.5, // Placeholder, replace with actual rating if available
+            reviews: 10, // Placeholder, replace with actual count if available
+            date: formattedDate,
+            time: timeRange,
+            duration: `${booking.duration} hour${booking.duration !== 1 ? 's' : ''}`,
+            total: booking.total,
+            status: uiStatus,
+            specialRequests: booking.specialRequests
+          };
+        });
+        
+        // Fetch tutor information to enhance booking display
+        try {
+          const tutorResponse = await fetch('http://localhost:8080/api/tutors');
+          if (tutorResponse.ok) {
+            const tutors = await tutorResponse.json();
+            
+            // Enhance bookings with tutor information
+            bookings = bookings.map(booking => {
+              const tutor = tutors.find(t => t.id === booking.tutorId);
+              if (tutor) {
+                return {
+                  ...booking,
+                  tutor: tutor.fullName || `Tutor #${booking.tutorId}`,
+                  specialization: tutor.subjects ? tutor.subjects.join(', ') : booking.specialization,
+                  experience: tutor.experienceYears || 'N/A',
+                  rating: tutor.rating || 4.5,
+                  reviews: Math.floor((tutor.rating || 4.5) * 20) // Placeholder: estimate number of reviews
+                };
+              }
+              return booking;
+            });
+          }
+        } catch (error) {
+          console.error('Error fetching tutor data:', error);
+          // Continue with bookings without tutor enhancement
+        }
+        
+        // Display the fetched bookings
+        filterBookings(currentFilter);
+        checkNewBooking();
+        
+      } catch (error) {
+        console.error('Error fetching bookings:', error);
+        const bookingsList = document.getElementById('bookings-list');
+        bookingsList.innerHTML = `
+          <div class="alert alert-danger" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            Failed to load bookings. Please try refreshing the page.
+          </div>
+        `;
+      }
+    }
+
+    function joinSession(id) {
+      const booking = bookings.find(b => b.id === id);
+      if (!booking) return;
+
+      // Create Teams meeting URL with booking details
+      const teamsUrl = `https://teams.microsoft.com/l/meetup-join/tutor-session-${id}`;
+      
+      // Show joining modal
+      const modal = document.createElement('div');
+      modal.className = 'modal fade';
+      modal.innerHTML = `
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Joining Session</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+              <div class="mb-4">
+                <i class="fas fa-video fa-3x text-primary mb-3"></i>
+                <h5>Ready to join your session with ${booking.tutor}?</h5>
+                <p class="text-muted">Subject: ${booking.subject}</p>
+                <p class="text-muted">Time: ${booking.time}</p>
+              </div>
+              <div class="d-grid gap-2">
+                <a href="${teamsUrl}" class="btn btn-primary" target="_blank">
+                  <i class="fab fa-microsoft me-2"></i>Join via Microsoft Teams
+                </a>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      const bsModal = new bootstrap.Modal(modal);
+      bsModal.show();
+      
+      modal.addEventListener('hidden.bs.modal', () => {
+        modal.remove();
+      });
+    }
+
+    function reschedule(id) {
+      const booking = bookings.find(b => b.id === id);
+      if (!booking) return;
+
+      const modal = document.createElement('div');
+      modal.className = 'modal fade';
+      modal.innerHTML = `
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Reschedule Session</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label class="form-label">Current Session</label>
+                <div class="p-3 bg-light rounded">
+                  <p class="mb-1"><strong>Date:</strong> ${booking.date}</p>
+                  <p class="mb-1"><strong>Time:</strong> ${booking.time}</p>
+                  <p class="mb-0"><strong>Tutor:</strong> ${booking.tutor}</p>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="new-date" class="form-label">New Date</label>
+                <input type="date" class="form-control" id="new-date" min="${new Date().toISOString().split('T')[0]}">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">New Time Slot</label>
+                <div class="time-slots d-flex flex-wrap gap-2" id="reschedule-time-slots">
+                  <!-- Time slots will be populated here -->
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-primary" onclick="confirmReschedule(${id})">
+                Confirm Reschedule
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      const bsModal = new bootstrap.Modal(modal);
+      bsModal.show();
+
+      // Populate time slots
+      const timeSlots = ['9:00 AM', '10:30 AM', '12:00 PM', '2:00 PM', '3:30 PM', '5:00 PM'];
+      const timeSlotsContainer = document.getElementById('reschedule-time-slots');
+      timeSlots.forEach(time => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'btn btn-outline-primary';
+        button.textContent = time;
+        button.onclick = () => selectTimeSlot(button);
+        timeSlotsContainer.appendChild(button);
+      });
+
+      modal.addEventListener('hidden.bs.modal', () => {
+        modal.remove();
+      });
+    }
+
+    function selectTimeSlot(button) {
+      document.querySelectorAll('#reschedule-time-slots .btn').forEach(btn => {
+        btn.classList.remove('btn-primary');
+        btn.classList.add('btn-outline-primary');
+      });
+      button.classList.remove('btn-outline-primary');
+      button.classList.add('btn-primary');
+    }
+
+    async function confirmReschedule(id) {
+      const newDate = document.getElementById('new-date').value;
+      const selectedTime = document.querySelector('#reschedule-time-slots .btn-primary')?.textContent;
+
+      if (!newDate || !selectedTime) {
+        showNotification('Please select both date and time', 'warning');
+        return;
+      }
+
+      const booking = bookings.find(b => b.id === id);
+      if (booking) {
+        try {
+          // Format new date for API
+          const apiDate = `${newDate}T${selectedTime.replace(' AM', ':00').replace(' PM', ':00')}`;
+          
+          // Update booking on server
+          const response = await fetch(`http://localhost:8080/api/bookings/${id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              ...booking,
+              sessionDate: apiDate,
+              startTime: selectedTime
+            })
+          });
+          
+          if (!response.ok) {
+            throw new Error('Failed to update booking');
+          }
+          
+          // Update local booking
+          booking.date = new Date(newDate).toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          });
+          booking.time = selectedTime;
+          filterBookings(currentFilter);
+          
+          const modal = document.querySelector('.modal');
+          bootstrap.Modal.getInstance(modal).hide();
+          
+          showNotification('Session rescheduled successfully!');
+        } catch (error) {
+          console.error('Error rescheduling booking:', error);
+          showNotification('Failed to reschedule booking', 'warning');
+        }
+      }
+    }
+
+    async function cancelBooking(id) {
+      const booking = bookings.find(b => b.id === id);
+      if (!booking) return;
+
+      const modal = document.createElement('div');
+      modal.className = 'modal fade';
+      modal.innerHTML = `
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Cancel Booking</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <div class="text-center mb-4">
+                <i class="fas fa-exclamation-circle text-warning fa-3x mb-3"></i>
+                <h5>Are you sure you want to cancel this session?</h5>
+                <p class="text-muted">This action cannot be undone.</p>
+              </div>
+              <div class="p-3 bg-light rounded mb-3">
+                <p class="mb-1"><strong>Tutor:</strong> ${booking.tutor}</p>
+                <p class="mb-1"><strong>Subject:</strong> ${booking.subject}</p>
+                <p class="mb-1"><strong>Date:</strong> ${booking.date}</p>
+                <p class="mb-0"><strong>Time:</strong> ${booking.time}</p>
+              </div>
+              <div class="mb-3">
+                <label for="cancel-reason" class="form-label">Reason for cancellation (optional)</label>
+                <textarea class="form-control" id="cancel-reason" rows="3"></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Keep Booking</button>
+              <button type="button" class="btn btn-danger" onclick="confirmCancellation(${id})">
+                Cancel Booking
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      const bsModal = new bootstrap.Modal(modal);
+      bsModal.show();
+
+      modal.addEventListener('hidden.bs.modal', () => {
+        modal.remove();
+      });
+    }
+
+    async function confirmCancellation(id) {
+      const booking = bookings.find(b => b.id === id);
+      const cancelReason = document.getElementById('cancel-reason').value;
+      
+      if (booking) {
+        try {
+          // Update booking status on server
+          const response = await fetch(`http://localhost:8080/api/bookings/${id}/status?status=cancelled`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          
+          if (!response.ok) {
+            throw new Error('Failed to cancel booking');
+          }
+          
+          // Update local booking
+          booking.status = 'Cancelled';
+          filterBookings(currentFilter);
+          
+          const modal = document.querySelector('.modal');
+          bootstrap.Modal.getInstance(modal).hide();
+          
+          showNotification('Booking cancelled successfully');
+        } catch (error) {
+          console.error('Error cancelling booking:', error);
+          showNotification('Failed to cancel booking', 'warning');
+        }
+      }
+    }
+
+    function rateSession(id) {
+      const booking = bookings.find(b => b.id === id);
+      if (!booking) return;
+
+      const modal = document.createElement('div');
+      modal.className = 'modal fade';
+      modal.innerHTML = `
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Rate Your Session</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <div class="text-center mb-4">
+                <h6>Session with ${booking.tutor}</h6>
+                <p class="text-muted">${booking.subject} - ${booking.date}</p>
+              </div>
+              <div class="rating-container text-center mb-4">
+                <div class="stars mb-3">
+                  <i class="far fa-star fa-2x mx-1" data-rating="1"></i>
+                  <i class="far fa-star fa-2x mx-1" data-rating="2"></i>
+                  <i class="far fa-star fa-2x mx-1" data-rating="3"></i>
+                  <i class="far fa-star fa-2x mx-1" data-rating="4"></i>
+                  <i class="far fa-star fa-2x mx-1" data-rating="5"></i>
+                </div>
+                <p class="rating-text text-muted">Click to rate</p>
+              </div>
+              <div class="mb-3">
+                <label for="review-text" class="form-label">Your Review (optional)</label>
+                <textarea class="form-control" id="review-text" rows="3" 
+                  placeholder="Share your experience with this tutor..."></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-primary" id="submit-rating-btn" onclick="submitRating(${id})" disabled>
+                Submit Rating
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+
+      // Add rating functionality
+      const stars = modal.querySelectorAll('.stars i');
+      const ratingText = modal.querySelector('.rating-text');
+      const submitBtn = modal.querySelector('#submit-rating-btn');
+      
+      stars.forEach(star => {
+        star.style.cursor = 'pointer';
+        star.addEventListener('mouseover', function() {
+          const rating = this.dataset.rating;
+          updateStars(stars, rating);
+          updateRatingText(rating);
+        });
+        
+        star.addEventListener('click', function() {
+          const rating = this.dataset.rating;
+          stars.forEach(s => s.dataset.selected = false);
+          this.dataset.selected = true;
+          submitBtn.disabled = false;
+        });
+      });
+
+      modal.querySelector('.stars').addEventListener('mouseout', function() {
+        const selectedStar = modal.querySelector('.stars i[data-selected="true"]');
+        if (selectedStar) {
+          updateStars(stars, selectedStar.dataset.rating);
+          updateRatingText(selectedStar.dataset.rating);
+        } else {
+          updateStars(stars, 0);
+          ratingText.textContent = 'Click to rate';
+        }
+      });
+
+      const bsModal = new bootstrap.Modal(modal);
+      bsModal.show();
+
+      modal.addEventListener('hidden.bs.modal', () => {
+        modal.remove();
+      });
+    }
+
+    function updateStars(stars, rating) {
+      stars.forEach(star => {
+        const starRating = star.dataset.rating;
+        star.className = starRating <= rating ? 'fas fa-star fa-2x mx-1 text-warning' : 'far fa-star fa-2x mx-1';
+      });
+    }
+
+    function updateRatingText(rating) {
+      const texts = [
+        'Click to rate',
+        'Poor',
+        'Fair',
+        'Good',
+        'Very Good',
+        'Excellent'
+      ];
+      const ratingText = document.querySelector('.rating-text');
+      ratingText.textContent = texts[rating] || texts[0];
+    }
+
+    async function submitRating(id) {
+      const selectedStar = document.querySelector('.stars i[data-selected="true"]');
+      const rating = selectedStar ? selectedStar.dataset.rating : null;
+      const review = document.getElementById('review-text').value;
+
+      if (rating) {
+        const booking = bookings.find(b => b.id === id);
+        if (booking) {
+          try {
+            // Send rating to server (would need an endpoint for this)
+            // For now, just update local booking data
+            booking.userRating = rating;
+            booking.userReview = review;
+            
+            const modal = document.querySelector('.modal');
+            bootstrap.Modal.getInstance(modal).hide();
+            
+            showNotification('Thank you for your rating!');
+          } catch (error) {
+            console.error('Error submitting rating:', error);
+            showNotification('Failed to submit rating', 'warning');
+          }
+        }
+      }
+    }
+
+    function bookAgain(id) {
+      window.location.href = 'Search.html';
+    }
+
+    function viewNotes(id) {
+      const booking = bookings.find(b => b.id === id);
+      if (!booking) return;
+
+      const modal = document.createElement('div');
+      modal.className = 'modal fade';
+      modal.innerHTML = `
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Session Notes</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <p><strong>Subject:</strong> ${booking.subject}</p>
+                <p><strong>Tutor:</strong> ${booking.tutor}</p>
+                <p><strong>Date:</strong> ${booking.date}</p>
+              </div>
+              <div class="bg-light p-3 rounded">
+                <h6 class="mb-3">Tutor's Notes</h6>
+                <p class="mb-0 text-muted">${booking.notes || 'No notes have been provided for this session.'}</p>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      const bsModal = new bootstrap.Modal(modal);
+      bsModal.show();
+
+      modal.addEventListener('hidden.bs.modal', () => {
+        modal.remove();
+      });
+    }
+
+    window.addEventListener('load', () => {
+      fetchBookings();
+      updateAuthButtons();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TuitionConnect - Submit a Tutor Review</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      background: linear-gradient(to right, #e3f2fd, #fce4ec);
+      font-family: 'Segoe UI', sans-serif;
+      transition: background 0.3s ease;
+    }
+    body.dark-mode {
+      background: linear-gradient(to right, #1a1a1a, #2d1b21);
+    }
+    .dark-mode .card {
+      background-color: #2d2d2d;
+      color: #e9ecef;
+    }
+    .rating {
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .rating .star {
+      color: #ccc;
+    }
+    .rating .star.active {
+      color: #ffd700;
+    }
+    footer {
+      background-color: #343a40;
+      color: white;
+      padding: 15px 0;
+      text-align: center;
+      margin-top: 60px;
+      font-size: 0.9rem;
+    }
+    .user-info {
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      background-color: #f8f9fa;
+      transition: background-color 0.3s ease;
+    }
+    .dark-mode .user-info {
+      background-color: #343a40;
+    }
+    .user-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #0d6efd;
+    }
+    .logged-out-message {
+      text-align: center;
+      padding: 20px;
+      background-color: #f8d7da;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    .dark-mode .logged-out-message {
+      background-color: #2c1215;
+      color: #f8d7da;
+    }
+    
+    /* Profile Dropdown Styles */
+    .profile-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .profile-pic {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      object-fit: cover;
+      border: 2px solid var(--primary, #0d6efd);
+      transition: all 0.3s ease;
+      background-color: #f8f9fa;
+    }
+
+    body.dark-mode .profile-pic {
+      background-color: #2d3238;
+    }
+
+    .profile-pic:hover {
+      border-color: var(--accent, #4cc9f0);
+      transform: scale(1.05);
+    }
+
+    .profile-dropdown-menu {
+      position: absolute;
+      top: 120%;
+      right: 0;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      min-width: 240px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
+
+    .profile-dropdown-menu.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    body.dark-mode .profile-dropdown-menu {
+      background: #2d2d2d;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .profile-header-item {
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    body.dark-mode .profile-header-item {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .profile-header-pic {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .profile-header-info {
+      flex: 1;
+    }
+
+    .profile-header-info .name {
+      font-weight: 600;
+      color: #000;
+      margin-bottom: 2px;
+    }
+
+    .profile-header-info .email {
+      font-size: 0.85rem;
+      color: #6c757d;
+    }
+
+    body.dark-mode .profile-header-info .name {
+      color: #fff;
+    }
+
+    body.dark-mode .profile-header-info .email {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .dropdown-item {
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #000;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    body.dark-mode .dropdown-item {
+      color: #fff;
+    }
+
+    .dropdown-item:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    body.dark-mode .dropdown-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm py-3">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">TuitionConnect</a>
+    <div class="d-flex align-items-center">
+      <div id="authButtons">
+        <!-- Will be populated by JavaScript -->
+      </div>
+      <button class="btn btn-outline-secondary ms-2 dark-toggle" onclick="toggleDarkMode()">
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="container my-5">
+  <h2 class="text-center mb-4"><i class="fas fa-star me-2"></i>Submit a Tutor Review</h2>
+
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <!-- User info section - will be shown only if logged in -->
+      <div id="user-info-section"></div>
+
+      <div class="card shadow p-4">
+        <form id="review-form">
+          <div class="mb-3">
+            <label for="tutor-select" class="form-label">Select Tutor:</label>
+            <select class="form-select" id="tutor-select" required>
+              <option value="">-- Choose a Tutor --</option>
+              <!-- Tutors will be populated from API -->
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="review-text" class="form-label">Your Review:</label>
+            <textarea class="form-control" id="review-text" rows="4" placeholder="Write your review here..." required></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Rating:</label>
+            <div class="rating" id="rating-stars">
+              <span class="star" data-value="1">★</span>
+              <span class="star" data-value="2">★</span>
+              <span class="star" data-value="3">★</span>
+              <span class="star" data-value="4">★</span>
+              <span class="star" data-value="5">★</span>
+            </div>
+            <input type="hidden" id="rating-value" name="rating" value="0" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Submit Review</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  © 2025 TuitionConnect. All rights reserved.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Get user data from localStorage
+  const user = JSON.parse(localStorage.getItem('user') || 'null');
+  const userRole = localStorage.getItem('role');
+  
+  // Check if user is logged in
+  function checkUserLoggedIn() {
+    const userInfoSection = document.getElementById('user-info-section');
+    
+    if (user) {
+      // User is logged in, show user info
+      userInfoSection.innerHTML = `
+        <div class="user-info d-flex align-items-center">
+          <img src="${user.profilePicture || 'default_avatar.jpg'}" class="user-avatar me-3" alt="Profile">
+          <div>
+            <h5 class="mb-0">${user.fullName}</h5>
+            <p class="mb-0 text-muted">${user.email}</p>
+            ${user.phone ? `<small class="text-muted">${user.phone}</small>` : ''}
+          </div>
+        </div>
+      `;
+      
+      // If user is a tutor, don't allow submitting reviews
+      if (userRole === 'tutor') {
+        document.getElementById('review-form').innerHTML = `
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            As a tutor, you cannot submit reviews for other tutors.
+          </div>
+        `;
+      }
+    } else {
+      // User is not logged in, show message
+      userInfoSection.innerHTML = `
+        <div class="logged-out-message">
+          <i class="fas fa-exclamation-circle me-2"></i>
+          You need to be logged in to submit a review.
+          <div class="mt-2">
+            <a href="Login.html" class="btn btn-primary btn-sm">Login</a>
+            <a href="studentregister.html" class="btn btn-outline-primary btn-sm ms-2">Register</a>
+          </div>
+        </div>
+      `;
+      
+      // Disable the form
+      document.getElementById('review-form').querySelectorAll('input, textarea, select, button').forEach(
+        el => el.disabled = true
+      );
+    }
+  }
+  
+  // Update auth buttons based on login status
+  function updateAuthButtons() {
+    const authButtonsDiv = document.getElementById('authButtons');
+    
+    if (user) {
+      // User is logged in, show profile dropdown
+      authButtonsDiv.innerHTML = `
+        <div class="profile-dropdown">
+          <img src="${user.profilePicture || 'default_avatar.jpg'}" alt="Profile" class="profile-pic" id="profileDropdownToggle">
+          <div class="profile-dropdown-menu" id="profileDropdownMenu">
+            <div class="profile-header-item">
+              <img src="${user.profilePicture || 'default_avatar.jpg'}" alt="Profile" class="profile-header-pic">
+              <div class="profile-header-info">
+                <div class="name">${user.fullName}</div>
+                <div class="email">${user.email}</div>
+              </div>
+            </div>
+            <a href="profile.html" class="dropdown-item">
+              <i class="fas fa-user-circle"></i>
+              My Profile
+            </a>
+            ${userRole === 'tutor' ? 
+              `<a href="tutormanagement.html" class="dropdown-item">
+                <i class="fas fa-chalkboard-teacher"></i>
+                Tutor Dashboard
+              </a>` : 
+              `<a href="bookings.html" class="dropdown-item">
+                <i class="fas fa-calendar-check"></i>
+                My Bookings
+              </a>`
+            }
+            <a href="#" class="dropdown-item" onclick="logout()">
+              <i class="fas fa-sign-out-alt"></i>
+              Logout
+            </a>
+          </div>
+        </div>
+      `;
+      
+      // Set up dropdown toggle
+      const profileDropdownToggle = document.getElementById('profileDropdownToggle');
+      const profileDropdownMenu = document.getElementById('profileDropdownMenu');
+      
+      profileDropdownToggle.addEventListener('click', function() {
+        profileDropdownMenu.classList.toggle('show');
+      });
+      
+      // Close dropdown when clicking outside
+      window.addEventListener('click', function(event) {
+        if (!event.target.matches('.profile-pic') && !profileDropdownMenu.contains(event.target)) {
+          profileDropdownMenu.classList.remove('show');
+        }
+      });
+    } else {
+      // User is not logged in, show login/register buttons
+      authButtonsDiv.innerHTML = `
+        <a href="Login.html" class="btn btn-outline-primary me-2">Login</a>
+        <a href="studentregister.html" class="btn btn-primary">Sign Up</a>
+      `;
+    }
+  }
+  
+  // Logout function
+  function logout() {
+    localStorage.removeItem('user');
+    localStorage.removeItem('role');
+    window.location.href = 'index.html';
+  }
+  
+  // Fetch tutors from API
+  async function fetchTutors() {
+    try {
+      const response = await fetch('http://localhost:8080/api/tutors');
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      
+      const tutors = await response.json();
+      const tutorSelect = document.getElementById('tutor-select');
+      
+      // Add tutors to the select dropdown
+      tutors.forEach(tutor => {
+        const option = document.createElement('option');
+        option.value = tutor.id;
+        option.textContent = tutor.fullName;
+        tutorSelect.appendChild(option);
+      });
+    } catch (error) {
+      console.error('Error fetching tutors:', error);
+    }
+  }
+
+  function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    const navbar = document.querySelector('.navbar');
+    if (document.body.classList.contains('dark-mode')) {
+      document.body.style.background = 'linear-gradient(to right, #1a1a1a, #2d1b21)';
+      navbar.classList.remove('navbar-light', 'bg-light');
+      navbar.classList.add('navbar-dark', 'bg-dark');
+      document.querySelector('.dark-toggle').innerHTML = '<i class="fas fa-sun"></i>';
+    } else {
+      document.body.style.background = 'linear-gradient(to right, #e3f2fd, #fce4ec)';
+      navbar.classList.remove('navbar-dark', 'bg-dark');
+      navbar.classList.add('navbar-light', 'bg-light');
+      document.querySelector('.dark-toggle').innerHTML = '<i class="fas fa-moon"></i>';
+    }
+    localStorage.setItem('darkMode', document.body.classList.contains('darkMode'));
+  }
+
+  if (localStorage.getItem('darkMode') === 'true') {
+    toggleDarkMode();
+  }
+
+  // Rating Selection
+  const stars = document.querySelectorAll('.star');
+  stars.forEach(star => {
+    star.addEventListener('click', () => {
+      const value = star.getAttribute('data-value');
+      document.getElementById('rating-value').value = value;
+      stars.forEach(s => s.classList.remove('active'));
+      for (let i = 0; i < value; i++) {
+        stars[i].classList.add('active');
+      }
+    });
+  });
+
+  // Form Submission
+  document.getElementById('review-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Check if user is logged in
+    if (!user) {
+      alert('You need to be logged in to submit a review.');
+      return;
+    }
+    
+    const tutorId = document.getElementById('tutor-select').value;
+    const reviewText = document.getElementById('review-text').value;
+    const rating = document.getElementById('rating-value').value;
+
+    if (!tutorId || !reviewText || rating === '0') {
+      alert('Please select a tutor, write a review, and provide a rating.');
+      return;
+    }
+
+    const reviewData = {
+      tutorId: parseInt(tutorId),
+      userId: user.id,  // Include user ID from logged in user
+      reviewText: reviewText,
+      rating: parseInt(rating),
+      date: new Date().toISOString().split('T')[0]
+    };
+
+    fetch('http://localhost:8080/api/reviews', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(reviewData)
+    })
+    .then(response => {
+      if (response.ok) {
+        alert('Review submitted successfully!');
+        document.getElementById('review-form').reset();
+        document.getElementById('rating-value').value = '0';
+        stars.forEach(s => s.classList.remove('active'));
+      } else {
+        alert('Failed to submit review. Please try again.');
+      }
+    })
+    .catch(error => console.error('Error:', error));
+  });
+  
+  // Initialize the page
+  document.addEventListener('DOMContentLoaded', function() {
+    // Update auth buttons
+    updateAuthButtons();
+    
+    // Check if user is logged in
+    checkUserLoggedIn();
+    
+    // Fetch tutors
+    fetchTutors();
+  });
+</script>
+</body>
+</html>

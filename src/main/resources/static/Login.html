@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login - TuitionConnect</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Login to your TuitionConnect account">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #e6f0ff;
+      --primary-dark: #3a56d4;
+      --secondary: #7209b7;
+      --accent: #4cc9f0;
+      --accent-alt: #f72585;
+      --success: #38b000;
+      --warning: #ffaa00;
+      --danger: #ef233c;
+      --bg-light: #ffffff;
+      --bg-dark: #121212;
+      --bg-light-secondary: #f8f9fa;
+      --bg-dark-secondary: #1e1e1e;
+      --text-light: rgba(255, 255, 255, 0.95);
+      --text-dark: rgba(0, 0, 0, 0.95);
+      --text-muted: rgba(0, 0, 0, 0.6);
+      --text-muted-light: rgba(255, 255, 255, 0.7);
+      --border-light: rgba(0, 0, 0, 0.1);
+      --border-dark: rgba(255, 255, 255, 0.1);
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --transition-base: all 0.3s ease;
+      --transition-slow: all 0.6s ease;
+      --border-radius: 8px;
+      --border-radius-lg: 12px;
+      --spacing-unit: 1rem;
+    }
+    
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition-slow);
+      line-height: 1.6;
+    }
+    
+    body.dark-mode {
+      background: var(--bg-dark);
+      color: var(--text-light);
+    }
+
+    /* Navigation */
+    nav {
+      background: var(--bg-light);
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+      border-bottom: 1px solid var(--border-light);
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode nav {
+      background: var(--bg-dark);
+      border-bottom: 1px solid var(--border-dark);
+    }
+    
+    nav.scrolled {
+      padding: 0.75rem 5%;
+      box-shadow: var(--shadow-md);
+    }
+    
+    nav h1 { 
+      font-size: 1.5rem; 
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-content {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    
+    nav ul li a {
+      color: var(--text-dark);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 0;
+      position: relative;
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode nav ul li a {
+      color: var(--text-light);
+    }
+    
+    nav ul li a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition-base);
+    }
+    
+    nav ul li a:hover {
+      color: var(--primary);
+    }
+    
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+    
+    .dark-toggle {
+      background: transparent;
+      color: var(--text-dark);
+      border: none;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode .dark-toggle {
+      color: var(--text-light);
+    }
+    
+    .dark-toggle:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    
+    body.dark-mode .dark-toggle:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .auth-buttons {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    
+    .auth-btn {
+      padding: 0.5rem 1.25rem;
+      border-radius: var(--border-radius-lg);
+      font-weight: 500;
+      text-decoration: none;
+      transition: var(--transition-base);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .login-btn {
+      background: transparent;
+      border: 1px solid var(--border-light);
+      color: var(--text-dark);
+    }
+    
+    body.dark-mode .login-btn {
+      border: 1px solid var(--border-dark);
+      color: var(--text-light);
+    }
+    
+    .login-btn:hover {
+      background: rgba(0, 0, 0, 0.02);
+      border-color: var(--primary);
+    }
+    
+    body.dark-mode .login-btn:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    
+    .signup-btn {
+      background: var(--primary);
+      border: 1px solid var(--primary);
+      color: white;
+    }
+    
+    .signup-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    /* Login Section */
+    .login-section {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 5%;
+      background: var(--bg-light-secondary);
+    }
+    
+    body.dark-mode .login-section {
+      background: var(--bg-dark-secondary);
+    }
+    
+    .login-container {
+      background: var(--bg-light);
+      border-radius: var(--border-radius-lg);
+      padding: 3rem;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode .login-container {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-dark);
+    }
+    
+    .login-container:hover {
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .login-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .login-header h2 {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+    
+    .login-header p {
+      color: var(--text-muted);
+    }
+    
+    body.dark-mode .login-header p {
+      color: var(--text-muted-light);
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text-dark);
+    }
+    
+    body.dark-mode .form-group label {
+      color: var(--text-light);
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-light);
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      transition: var(--transition-base);
+      background: var(--bg-light);
+      color: var(--text-dark);
+    }
+    
+    body.dark-mode .form-control {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-dark);
+      color: var(--text-light);
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+    
+    .input-group {
+      position: relative;
+      display: flex;
+    }
+    
+    .input-group .form-control {
+      flex: 1;
+    }
+    
+    .input-group-append {
+      display: flex;
+      align-items: center;
+      padding: 0 1rem;
+      background: var(--bg-light-secondary);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      border-radius: 0 var(--border-radius) var(--border-radius) 0;
+      cursor: pointer;
+    }
+    
+    body.dark-mode .input-group-append {
+      background: var(--bg-dark-secondary);
+      border: 1px solid var(--border-dark);
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius-lg);
+      font-weight: 500;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition-base);
+      width: 100%;
+    }
+    
+    .btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .btn-block {
+      display: block;
+      width: 100%;
+    }
+    
+    .text-center {
+      text-align: center;
+    }
+    
+    .mt-3 {
+      margin-top: 1rem;
+    }
+    
+    .mb-3 {
+      margin-bottom: 1rem;
+    }
+    
+    .alert {
+      padding: 1rem;
+      border-radius: var(--border-radius);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .alert-danger {
+      background: rgba(239, 35, 60, 0.1);
+      border: 1px solid rgba(239, 35, 60, 0.2);
+      color: var(--danger);
+    }
+    
+    .role-selector {
+      display: flex;
+      margin-bottom: 1.5rem;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+    }
+    
+    body.dark-mode .role-selector {
+      border: 1px solid var(--border-dark);
+    }
+    
+    .role-btn {
+      flex: 1;
+      padding: 0.75rem;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      transition: var(--transition-base);
+      text-align: center;
+    }
+    
+    .role-btn.active {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 1.5rem 0;
+      color: var(--text-muted);
+    }
+    
+    body.dark-mode .divider {
+      color: var(--text-muted-light);
+    }
+    
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-light);
+      margin: 0 1rem;
+    }
+    
+    body.dark-mode .divider::before,
+    body.dark-mode .divider::after {
+      background: var(--border-dark);
+    }
+    
+    .social-login {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .social-btn {
+      flex: 1;
+      padding: 0.75rem;
+      border-radius: var(--border-radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-weight: 500;
+      transition: var(--transition-base);
+      border: 1px solid var(--border-light);
+      background: var(--bg-light);
+      color: var(--text-dark);
+    }
+    
+    body.dark-mode .social-btn {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-dark);
+      color: var(--text-light);
+    }
+    
+    .social-btn:hover {
+      background: var(--bg-light-secondary);
+    }
+    
+    body.dark-mode .social-btn:hover {
+      background: var(--bg-dark-secondary);
+    }
+    
+    .social-btn.google {
+      color: #DB4437;
+    }
+    
+    .social-btn.apple {
+      color: var(--text-dark);
+    }
+    
+    body.dark-mode .social-btn.apple {
+      color: var(--text-light);
+    }
+    
+    .register-link {
+      margin-top: 1.5rem;
+      color: var(--text-muted);
+    }
+    
+    body.dark-mode .register-link {
+      color: var(--text-muted-light);
+    }
+    
+    .register-link a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .register-link a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Footer */
+    footer {
+      background: var(--bg-light);
+      padding: 1.5rem 5%;
+      border-top: 1px solid var(--border-light);
+      text-align: center;
+      color: var(--text-muted);
+    }
+    
+    body.dark-mode footer {
+      background: var(--bg-dark);
+      border-top: 1px solid var(--border-dark);
+      color: var(--text-muted-light);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem 5%;
+      }
+      
+      .nav-content {
+        flex-direction: column;
+        width: 100%;
+      }
+      
+      nav ul {
+        flex-direction: column;
+        gap: 0.75rem;
+        width: 100%;
+      }
+      
+      .auth-buttons {
+        width: 100%;
+        justify-content: center;
+        margin-top: 1rem;
+      }
+      
+      .login-container {
+        padding: 2rem;
+      }
+      
+      .social-login {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav id="mainNav">
+    <h1><i class="fas fa-chalkboard-teacher"></i> TuitionConnect</h1>
+    <div class="nav-content">
+      <ul>
+        <li><a href="Search.html">Book a Tutor</a></li>
+        <li><a href="Subjects.html">Subjects</a></li>
+        <li><a href="Contact.html">Contact</a></li>
+      </ul>
+      <div class="auth-buttons">
+        <a href="Login.html" class="auth-btn login-btn">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </a>
+        <div class="signup-dropdown">
+          <a href="#" class="auth-btn signup-btn">
+            <i class="fas fa-user-plus"></i> Sign Up
+          </a>
+          <div class="dropdown-menu">
+            <a href="studentregister.html">As Student</a>
+            <a href="tutorregister.html">As Tutor</a>
+          </div>
+        </div>
+        <button class="dark-toggle" onclick="toggleDarkMode()">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <section class="login-section">
+    <div class="login-container">
+      <div class="login-header">
+        <h2>Welcome Back</h2>
+        <p>Login to access your personalized learning dashboard</p>
+      </div>
+
+      <div id="error-alert" class="alert alert-danger" style="display: none;">
+        <i class="fas fa-exclamation-circle"></i>
+        <span id="error-message"></span>
+      </div>
+
+      <div class="role-selector">
+        <button type="button" class="role-btn active" onclick="setRole('student')">Student</button>
+        <button type="button" class="role-btn" onclick="setRole('tutor')">Tutor</button>
+      </div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-group">
+            <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+            <div class="input-group-append" onclick="togglePassword()">
+              <i class="fas fa-eye"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group text-right">
+          <a href="#" style="color: var(--primary); text-decoration: none;">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn btn-block">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+
+        <div class="divider">or continue with</div>
+
+        <div class="social-login">
+          <button type="button" class="social-btn google">
+            <i class="fab fa-google"></i> Google
+          </button>
+          <button type="button" class="social-btn apple">
+            <i class="fab fa-apple"></i> Apple
+          </button>
+        </div>
+
+        <div class="register-link">
+          Don't have an account? <a href="studentregister.html">Register here</a>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    © 2025 TuitionConnect. All rights reserved.
+  </footer>
+
+  <script>
+    // Global variable to track the current role
+    let currentRole = 'student';
+
+    // Set the active role based on user selection
+    function setRole(role) {
+      currentRole = role;
+      const buttons = document.querySelectorAll('.role-btn');
+      buttons.forEach(button => {
+        button.classList.remove('active');
+      });
+
+      if (role === 'student') {
+        buttons[0].classList.add('active');
+      } else {
+        buttons[1].classList.add('active');
+      }
+    }
+
+    // Toggle password visibility
+    function togglePassword() {
+      const passwordInput = document.getElementById('password');
+      const eyeIcon = document.querySelector('.input-group-append i');
+
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+      }
+    }
+
+    // Toggle dark mode
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      const darkToggle = document.querySelector('.dark-toggle i');
+      if (document.body.classList.contains('dark-mode')) {
+        darkToggle.classList.remove('fa-moon');
+        darkToggle.classList.add('fa-sun');
+        localStorage.setItem('darkMode', 'true');
+      } else {
+        darkToggle.classList.remove('fa-sun');
+        darkToggle.classList.add('fa-moon');
+        localStorage.setItem('darkMode', 'false');
+      }
+    }
+
+    // Show error message
+    function showError(message) {
+      const errorAlert = document.getElementById('error-alert');
+      const errorMessage = document.getElementById('error-message');
+
+      errorMessage.textContent = message;
+      errorAlert.style.display = 'flex';
+    }
+
+    // Hide error message
+    function hideError() {
+      document.getElementById('error-alert').style.display = 'none';
+    }
+
+    // Login form submit handler
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      hideError();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      // Create login data
+      const loginData = {
+        email: email,
+        password: password,
+        role: currentRole
+      };
+
+      // Log the data being sent (for debugging)
+      console.log('Login attempt with:', loginData);
+
+      // Send login request to backend
+      fetch('http://localhost:8080/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(loginData)
+      })
+      .then(response => {
+        if (!response.ok) {
+          if (response.status === 401) {
+            throw new Error('Invalid email or password');
+          } else {
+            throw new Error(`Server error: ${response.status}`);
+          }
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Login response:', data);
+
+        if (data.success) {
+          // Store user data in localStorage
+          localStorage.setItem('user', JSON.stringify(data.data));
+          localStorage.setItem('role', data.role);
+
+          // Redirect based on role
+          if (email === 'admin@gmail.com') {
+            window.location.href = 'tutormanagement.html';
+          } else {
+            window.location.href = 'index.html';
+          }
+        } else {
+          showError(data.message || 'Login failed. Please try again.');
+        }
+      })
+      .catch(error => {
+        console.error('Login error:', error);
+        showError(error.message || 'Login failed. Please try again.');
+      });
+    });
+
+    // Check for saved dark mode preference
+    document.addEventListener('DOMContentLoaded', function() {
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.querySelector('.dark-toggle i').className = 'fas fa-sun';
+      }
+    });
+  </script>
+</body>
+</html>

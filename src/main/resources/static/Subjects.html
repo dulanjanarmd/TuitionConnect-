@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TuitionConnect - Subjects & Tutors</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #e6f0ff;
+      --primary-dark: #3a56d4;
+      --secondary: #7209b7;
+      --accent: #4cc9f0;
+      --accent-alt: #f72585;
+      --success: #38b000;
+      --warning: #ffaa00;
+      --danger: #ef233c;
+      --bg-light: #ffffff;
+      --bg-dark: #121212;
+      --bg-light-secondary: #f8f9fa;
+      --bg-dark-secondary: #1e1e1e;
+      --text-light: rgba(255, 255, 255, 0.95);
+      --text-dark: rgba(0, 0, 0, 0.95);
+      --text-muted: rgba(0, 0, 0, 0.6);
+      --text-muted-light: rgba(255, 255, 255, 0.7);
+      --border-light: rgba(0, 0, 0, 0.1);
+      --border-dark: rgba(255, 255, 255, 0.1);
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --transition-base: all 0.3s ease;
+      --transition-slow: all 0.6s ease;
+      --border-radius: 8px;
+      --border-radius-lg: 12px;
+      --spacing-unit: 1rem;
+    }
+    
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition-slow);
+      line-height: 1.6;
+    }
+    
+    body.dark-mode {
+      background: var(--bg-dark);
+      color: var(--text-light);
+    }
+
+    /* Navigation */
+    nav {
+      background: var(--bg-light);
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+      border-bottom: 1px solid var(--border-light);
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode nav {
+      background: var(--bg-dark);
+      border-bottom: 1px solid var(--border-dark);
+    }
+    
+    nav.scrolled {
+      padding: 0.75rem 5%;
+      box-shadow: var(--shadow-md);
+    }
+    
+    nav h1 { 
+      font-size: 1.5rem; 
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-content {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    
+    nav ul li a {
+      color: var(--text-dark);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 0;
+      position: relative;
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode nav ul li a {
+      color: var(--text-light);
+    }
+    
+    nav ul li a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition-base);
+    }
+    
+    nav ul li a:hover {
+      color: var(--primary);
+    }
+    
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+    
+    .dark-toggle {
+      background: transparent;
+      color: var(--text-dark);
+      border: none;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode .dark-toggle {
+      color: var(--text-light);
+    }
+    
+    .dark-toggle:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    
+    body.dark-mode .dark-toggle:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Main Content */
+    .container {
+      flex: 1;
+      padding: 2rem 5%;
+      background: var(--bg-light-secondary);
+    }
+    
+    body.dark-mode .container {
+      background: var(--bg-dark-secondary);
+    }
+
+    /* Tab Styles */
+    .nav-tabs {
+      border-bottom: 1px solid var(--border-light);
+    }
+    
+    body.dark-mode .nav-tabs {
+      border-bottom-color: var(--border-dark);
+    }
+    
+    .nav-tabs .nav-link {
+      color: var(--text-dark);
+      border: none;
+      padding: 0.75rem 1.5rem;
+      transition: var(--transition-base);
+    }
+    
+    body.dark-mode .nav-tabs .nav-link {
+      color: var(--text-light);
+    }
+    
+    .nav-tabs .nav-link:hover {
+      border-color: transparent;
+      color: var(--primary);
+    }
+    
+    .nav-tabs .nav-link.active {
+      color: var(--primary);
+      border-bottom: 2px solid var(--primary);
+      background: transparent;
+    }
+
+    /* Card Styles */
+    .card {
+      border: 1px solid var(--border-light);
+      border-radius: var(--border-radius-lg);
+      transition: var(--transition-base);
+      background: var(--bg-light);
+    }
+    
+    body.dark-mode .card {
+      background: var(--bg-dark);
+      border-color: var(--border-dark);
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .card-title {
+      color: var(--primary);
+    }
+    
+    .subject-icon-container {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      margin-right: 15px;
+      background: var(--primary-light);
+    }
+    
+    body.dark-mode .subject-icon-container {
+      background: rgba(67, 97, 238, 0.1);
+    }
+    
+    .tutor-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+    
+    body.dark-mode .tutor-badge {
+      background: rgba(67, 97, 238, 0.2);
+    }
+
+    /* Loading Spinner */
+    .loading-container {
+      text-align: center;
+      padding: 2rem;
+    }
+    
+    .spinner-border {
+      width: 3rem;
+      height: 3rem;
+      color: var(--primary);
+    }
+
+    /* Error Message */
+    .error-message {
+      text-align: center;
+      padding: 1rem;
+      background-color: #f8d7da;
+      color: #721c24;
+      border-radius: var(--border-radius);
+      margin: 1rem 0;
+    }
+    
+    body.dark-mode .error-message {
+      background-color: #2c1215;
+      color: #f8d7da;
+    }
+
+    /* Star Rating */
+    .star {
+      font-size: 1.5rem;
+      color: #ccc;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    
+    .star.selected,
+    .star.hovered {
+      color: var(--warning);
+    }
+    
+    .review-stars {
+      color: var(--warning);
+      font-size: 1.2rem;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--bg-light);
+      padding: 1.5rem 5%;
+      border-top: 1px solid var(--border-light);
+      text-align: center;
+      color: var(--text-muted);
+    }
+    
+    body.dark-mode footer {
+      background: var(--bg-dark);
+      border-top: 1px solid var(--border-dark);
+      color: var(--text-muted-light);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem 5%;
+      }
+      
+      .nav-content {
+        flex-direction: column;
+        width: 100%;
+      }
+      
+      nav ul {
+        flex-direction: column;
+        gap: 0.75rem;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav id="mainNav">
+    <h1><i class="fas fa-chalkboard-teacher"></i> TuitionConnect</h1>
+    <div class="nav-content">
+      <ul>
+        <li><a href="Search.html">Book a Tutor</a></li>
+        <li><a href="Subjects.html" class="active">Subjects</a></li>
+        <li><a href="viewprofile.html">View Profile</a></li>
+        <li><a href="Contact.html">Contact</a></li>
+        <li><a href="viewbooking.html">View Booking</a></li>
+      </ul>
+      <div class="auth-buttons" id="authButtons">
+        <!-- Auth buttons will be dynamically populated -->
+      </div>
+    </div>
+  </nav>
+
+  <div class="container my-5">
+    <h2 class="text-center mb-4"><i class="fas fa-book me-2"></i>Subjects & Tutors</h2>
+
+    <ul class="nav nav-tabs mb-3">
+      <li class="nav-item">
+        <a class="nav-link active" data-bs-toggle="tab" href="#subjects-tab">Subjects</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#tutors-tab">Tutors</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#review-tab">Review</a>
+      </li>
+    </ul>
+
+    <div class="tab-content">
+      <!-- Subjects -->
+      <div class="tab-pane fade show active" id="subjects-tab">
+        <div class="row" id="subjects-list">
+          <!-- Loading indicator for subjects -->
+          <div class="col-12 loading-container" id="subjects-loading">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading subjects...</p>
+          </div>
+
+          <!-- Error message for subjects -->
+          <div class="col-12 error-message d-none" id="subjects-error">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span>Failed to load subjects. Please try again later.</span>
+          </div>
+
+          <!-- Subject cards will be inserted here by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Tutors -->
+      <div class="tab-pane fade" id="tutors-tab">
+        <div class="row" id="tutors-list">
+          <!-- Loading indicator for tutors -->
+          <div class="col-12 loading-container" id="tutors-loading">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading tutors...</p>
+          </div>
+
+          <!-- Error message for tutors -->
+          <div class="col-12 error-message d-none" id="tutors-error">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span>Failed to load tutors. Please try again later.</span>
+          </div>
+
+          <!-- Tutor cards will be inserted here by JavaScript -->
+        </div>
+      </div>
+
+      <!-- reviews -->
+      <div class="tab-pane fade" id="review-tab">
+        <div class="row">
+          <!-- Review Form Column -->
+          <div class="col-md-6">
+            <div class="card shadow p-4">
+              <form id="review-form">
+                <div class="mb-3">
+                  <label for="tutor-select" class="form-label">Select Tutor:</label>
+                  <select class="form-select" id="tutor-select" required>
+                    <option value="">-- Choose a Tutor --</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="review-text" class="form-label">Your Review:</label>
+                  <textarea class="form-control" id="review-text" rows="4" placeholder="Write your review here..."
+                    required></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Rating:</label>
+                  <div class="rating" id="rating-stars">
+                    <span class="star" data-value="1">★</span>
+                    <span class="star" data-value="2">★</span>
+                    <span class="star" data-value="3">★</span>
+                    <span class="star" data-value="4">★</span>
+                    <span class="star" data-value="5">★</span>
+                  </div>
+                  <input type="hidden" id="rating-value" name="rating" value="0" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Submit Review</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Review List Column -->
+          <div class="col-md-6">
+            <div class="card shadow p-4">
+              <h5 class="mb-3">Latest Reviews</h5>
+              <div id="review-list" style="max-height: 400px; overflow-y: auto;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 TuitionConnect. All rights reserved.
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // ============= Authentication Logic =============
+
+    // Get user data from localStorage
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    const userRole = localStorage.getItem('role');
+
+    // Update auth buttons based on login status
+    function updateAuthButtons() {
+      const authButtonsDiv = document.getElementById('authButtons');
+
+      if (user) {
+        // Get user details including profile picture
+        const users = JSON.parse(localStorage.getItem(user.role === 'tutor' ? 'tutors' : 'students') || '[]');
+        const userDetails = users.find(u => u.email === user.email);
+        const profilePic = userDetails?.profilePicture || 'https://via.placeholder.com/150';
+
+        // User is logged in, show profile dropdown
+        authButtonsDiv.innerHTML = `
+          <div class="d-flex align-items-center">
+            <div class="profile-dropdown">
+              <img src="${profilePic}" alt="Profile" class="profile-pic" id="profileDropdownBtn">
+              <div class="profile-dropdown-menu" id="profileDropdownMenu">
+                <div class="profile-header-item">
+                  <img src="${profilePic}" alt="Profile" class="profile-header-pic">
+                  <div class="profile-header-info">
+                    <div class="name">${user.name}</div>
+                    <div class="email">${user.email}</div>
+                  </div>
+                </div>
+                <div class="dropdown-divider"></div>
+                <a href="viewprofile.html" class="dropdown-item">
+                  <i class="fas fa-id-card"></i>
+                  View Profile
+                </a>
+                ${userRole === 'tutor' ? 
+                  `<a href="tutormanagement.html" class="dropdown-item">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    Tutor Dashboard
+                  </a>` : 
+                  `<a href="viewbooking.html" class="dropdown-item">
+                    <i class="fas fa-calendar-check"></i>
+                    My Bookings
+                  </a>`
+                }
+                <div class="dropdown-divider"></div>
+                <a onclick="logout()" class="dropdown-item">
+                  <i class="fas fa-sign-out-alt"></i>
+                  Sign Out
+                </a>
+              </div>
+            </div>
+            <button class="dark-toggle ms-2" onclick="toggleDarkMode()">
+              <i class="fas fa-moon"></i>
+            </button>
+          </div>
+        `;
+
+        // Add click event listener for profile dropdown
+        const profileBtn = document.getElementById('profileDropdownBtn');
+        const dropdownMenu = document.getElementById('profileDropdownMenu');
+        
+        profileBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+          dropdownMenu.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+          if (!e.target.closest('.profile-dropdown')) {
+            dropdownMenu.style.display = 'none';
+            dropdownMenu.classList.remove('show');
+          }
+        });
+      } else {
+        // User is not logged in, show login/register buttons
+        authButtonsDiv.innerHTML = `
+          <a href="Login.html" class="btn btn-outline-primary me-2">Login</a>
+          <a href="studentregister.html" class="btn btn-primary">Sign Up</a>
+        `;
+      }
+    }
+
+    // Logout function
+    function logout() {
+      localStorage.removeItem('user');
+      localStorage.removeItem('role');
+      window.location.href = 'index.html';
+    }
+
+    // Toggle dark mode
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      const darkToggle = document.querySelector('.dark-toggle i');
+      if (document.body.classList.contains('dark-mode')) {
+        darkToggle.classList.remove('fa-moon');
+        darkToggle.classList.add('fa-sun');
+        localStorage.setItem('darkMode', 'enabled');
+      } else {
+        darkToggle.classList.remove('fa-sun');
+        darkToggle.classList.add('fa-moon');
+        localStorage.setItem('darkMode', 'disabled');
+      }
+    }
+
+    // ============= Subjects Logic =============
+
+    // Subject icons mapping
+    const subjectIcons = {
+      'OOP': 'fas fa-code',
+      'DSA': 'fas fa-project-diagram',
+      'DM': 'fas fa-calculator',
+      'TW': 'fas fa-pen-fancy',
+      'default': 'fas fa-book'
+    };
+
+    // Subject colors mapping
+    const subjectColors = {
+      'OOP': 'primary',
+      'DSA': 'success',
+      'DM': 'info',
+      'TW': 'warning',
+      'default': 'secondary'
+    };
+
+    // Fetch subjects from API
+    async function fetchSubjects() {
+      const subjectsList = document.getElementById('subjects-list');
+      const subjectsLoading = document.getElementById('subjects-loading');
+      const subjectsError = document.getElementById('subjects-error');
+
+      try {
+        const response = await fetch('http://localhost:8080/api/subjects');
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const subjects = await response.json();
+
+        // Hide loading indicator
+        subjectsLoading.classList.add('d-none');
+
+        // Check if we have subjects
+        if (subjects.length === 0) {
+          subjectsList.innerHTML = '<div class="col-12 text-center">No subjects available at the moment.</div>';
+          return;
+        }
+
+        // Generate subject cards
+        let subjectsHTML = '';
+
+        subjects.forEach(subject => {
+          const icon = subjectIcons[subject.code] || subjectIcons.default;
+          const color = subjectColors[subject.code] || subjectColors.default;
+
+          subjectsHTML += `
+          <div class="col-md-3 mb-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                  <div class="subject-icon-container bg-${color}-subtle">
+                    <i class="${icon} text-${color}"></i>
+                  </div>
+                  <div>
+                    <h5 class="card-title mb-1">${subject.code}</h5>
+                    <p class="text-muted mb-0">${subject.name}</p>
+                  </div>
+                </div>
+                <p class="card-text">${subject.description}</p>
+                <a href="Search.html?subject=${subject.code}" class="btn btn-${color}">Find ${subject.code} Tutor</a>
+              </div>
+            </div>
+          </div>
+        `;
+        });
+
+        // Add subject cards to the page
+        subjectsList.innerHTML = subjectsHTML;
+
+      } catch (error) {
+        console.error('Error fetching subjects:', error);
+        subjectsLoading.classList.add('d-none');
+        subjectsError.classList.remove('d-none');
+      }
+    }
+
+    // ============= Tutors Logic =============
+
+    // Fetch tutors from API
+    async function fetchTutors() {
+      const tutorsList = document.getElementById('tutors-list');
+      const tutorsLoading = document.getElementById('tutors-loading');
+      const tutorsError = document.getElementById('tutors-error');
+
+      try {
+        const response = await fetch('http://localhost:8080/api/tutors');
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const tutors = await response.json();
+
+        // Hide loading indicator
+        tutorsLoading.classList.add('d-none');
+
+        // Check if we have tutors
+        if (tutors.length === 0) {
+          tutorsList.innerHTML = '<div class="col-12 text-center">No tutors available at the moment.</div>';
+          return;
+        }
+
+        // Filter active tutors
+        const activeTutors = tutors.filter(tutor => tutor.status === 'active');
+
+        if (activeTutors.length === 0) {
+          tutorsList.innerHTML = '<div class="col-12 text-center">No active tutors available at the moment.</div>';
+          return;
+        }
+
+        // Generate tutor cards
+        let tutorsHTML = '';
+
+        activeTutors.forEach(tutor => {
+          // Get first subject for the badge
+          const primarySubject = tutor.subjects && tutor.subjects.length > 0 ? tutor.subjects[0] : null;
+          const subjectCode = primarySubject && primarySubject.includes('(') ?
+            primarySubject.match(/\(([^)]+)\)/)[1] : primarySubject;
+
+          const badgeColor = primarySubject ? subjectColors[subjectCode] || subjectColors.default : subjectColors.default;
+          const icon = primarySubject ? subjectIcons[subjectCode] || subjectIcons.default : subjectIcons.default;
+
+          tutorsHTML += `
+          <div class="col-md-6 mb-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                  <div class="subject-icon-container bg-${badgeColor}-subtle">
+                    <i class="${icon} text-${badgeColor}"></i>
+                  </div>
+                  <div>
+                    <h5 class="card-title mb-1">${tutor.fullName}</h5>
+                    ${primarySubject ?
+                      `<span class="badge bg-${badgeColor}-subtle text-${badgeColor}">${primarySubject} Specialist</span>` :
+                      ''
+                    }
+                  </div>
+                </div>
+                <p class="card-text">
+                  ${primarySubject ?
+                    `<i class="${icon} me-2"></i>${primarySubject} Expert<br>` :
+                    ''
+                  }
+                  <i class="fas fa-star text-warning me-2"></i>${tutor.rating} ${tutor.rating === 5 ? '(New Tutor)' : `(${Math.floor(Math.random() * 100) + 10}+ reviews)`}<br>
+                  <i class="fas fa-clock me-2"></i>${tutor.experienceYears}+ years of teaching experience
+                </p>
+                <a href="Search.html?tutor=${tutor.id}" class="btn btn-${badgeColor}">Book Sessions</a>
+              </div>
+            </div>
+          </div>
+        `;
+        });
+
+        // Add tutor cards to the page
+        tutorsList.innerHTML = tutorsHTML;
+
+      } catch (error) {
+        console.error('Error fetching tutors:', error);
+        tutorsLoading.classList.add('d-none');
+        tutorsError.classList.remove('d-none');
+      }
+    }
+
+    // ============= Review Logic =============
+
+    // Fetch tutors for review form
+    async function fetchTutorsForReview() {
+      try {
+        const response = await fetch('http://localhost:8080/api/tutors');
+        if (!response.ok) throw new Error('Failed to fetch tutors');
+        
+        const tutors = await response.json();
+        const tutorSelect = document.getElementById('tutor-select');
+        
+        // Clear existing options
+        tutorSelect.innerHTML = '<option value="">-- Choose a Tutor --</option>';
+        
+        // Add tutors to select
+        tutors.forEach(tutor => {
+          const option = document.createElement('option');
+          option.value = tutor.id;
+          option.textContent = tutor.fullName;
+          tutorSelect.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Error fetching tutors:', error);
+      }
+    }
+
+    // Handle star rating selection
+    function setupStarRating() {
+      const stars = document.querySelectorAll('#rating-stars .star');
+      const ratingInput = document.getElementById('rating-value');
+      
+      stars.forEach(star => {
+        star.addEventListener('click', () => {
+          const value = parseInt(star.getAttribute('data-value'));
+          ratingInput.value = value;
+          
+          // Update star display
+          stars.forEach((s, index) => {
+            if (index < value) {
+              s.classList.add('selected');
+            } else {
+              s.classList.remove('selected');
+            }
+          });
+        });
+        
+        // Hover effects
+        star.addEventListener('mouseover', () => {
+          const value = parseInt(star.getAttribute('data-value'));
+          stars.forEach((s, index) => {
+            if (index < value) {
+              s.classList.add('hovered');
+            } else {
+              s.classList.remove('hovered');
+            }
+          });
+        });
+        
+        star.addEventListener('mouseout', () => {
+          stars.forEach(s => s.classList.remove('hovered'));
+        });
+      });
+    }
+
+    // Handle review form submission
+    function setupReviewForm() {
+      const reviewForm = document.getElementById('review-form');
+      
+      reviewForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Check if user is logged in
+        if (!user) {
+          alert('Please login to submit a review');
+          window.location.href = 'Login.html';
+          return;
+        }
+        
+        // Get form data
+        const tutorId = document.getElementById('tutor-select').value;
+        const reviewText = document.getElementById('review-text').value;
+        const rating = document.getElementById('rating-value').value;
+        
+        if (!tutorId || !reviewText || rating === '0') {
+          alert('Please fill all fields and select a rating');
+          return;
+        }
+        
+        // Get tutor name
+        const tutorName = document.getElementById('tutor-select').selectedOptions[0].text;
+        
+        // Create review object
+        const review = {
+          tutorId: tutorId,
+          tutorName: tutorName,
+          userId: user.id,
+          userName: user.name,
+          reviewText: reviewText,
+          rating: parseInt(rating),
+          date: new Date().toISOString()
+        };
+        
+        try {
+          // Submit review to API
+          const response = await fetch('http://localhost:8080/api/reviews', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(review)
+          });
+          
+          if (!response.ok) throw new Error('Failed to submit review');
+          
+          // Show success message
+          alert('Review submitted successfully!');
+          
+          // Reset form
+          reviewForm.reset();
+          document.querySelectorAll('#rating-stars .star').forEach(s => s.classList.remove('selected'));
+          document.getElementById('rating-value').value = '0';
+          
+          // Refresh reviews list
+          fetchReviews();
+          
+        } catch (error) {
+          console.error('Error submitting review:', error);
+          alert('Failed to submit review. Please try again.');
+        }
+      });
+    }
+
+    // Fetch and display reviews
+    async function fetchReviews() {
+      try {
+        const response = await fetch('http://localhost:8080/api/reviews');
+        if (!response.ok) throw new Error('Failed to fetch reviews');
+        
+        const reviews = await response.json();
+        const reviewList = document.getElementById('review-list');
+        
+        // Clear existing reviews
+        reviewList.innerHTML = '';
+        
+        if (reviews.length === 0) {
+          reviewList.innerHTML = '<p class="text-muted">No reviews yet.</p>';
+          return;
+        }
+        
+        // Sort by date (newest first)
+        reviews.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        // Display reviews
+        reviews.forEach(review => {
+          const reviewElement = document.createElement('div');
+          reviewElement.className = 'mb-3 pb-3 border-bottom';
+          
+          // Format date
+          const reviewDate = new Date(review.date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          });
+          
+          // Create stars
+          let stars = '';
+          for (let i = 1; i <= 5; i++) {
+            stars += `<i class="fas fa-star${i <= review.rating ? '' : '-o'} text-warning"></i> `;
+          }
+          
+          reviewElement.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h6 class="mb-0">${review.tutorName}</h6>
+              <small class="text-muted">${reviewDate}</small>
+            </div>
+            <div class="mb-2">${stars}</div>
+            <p class="mb-0">${review.reviewText}</p>
+            <small class="text-muted">- ${review.userName}</small>
+          `;
+          
+          reviewList.appendChild(reviewElement);
+        });
+        
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+        document.getElementById('review-list').innerHTML = '<p class="text-danger">Failed to load reviews.</p>';
+      }
+    }
+
+    // ============= Initialization =============
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Update auth buttons
+      updateAuthButtons();
+
+      // Load dark mode from localStorage
+      if (localStorage.getItem('darkMode') === 'enabled') {
+        document.body.classList.add('dark-mode');
+        const darkToggle = document.querySelector('.dark-toggle i');
+        darkToggle.classList.remove('fa-moon');
+        darkToggle.classList.add('fa-sun');
+      }
+
+      // Fetch data from APIs
+      fetchSubjects();
+      fetchTutors();
+      fetchTutorsForReview();
+      fetchReviews();
+      
+      // Setup review functionality
+      setupStarRating();
+      setupReviewForm();
+    });
+  </script>
+</body>
+</html>
